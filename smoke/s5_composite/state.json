@@ -1,0 +1,13 @@
+{
+  "task_id": "t1787022056",
+  "need": "先给我写一个冒泡排序函数，再帮我整理一份会议纪要模板。",
+  "classify": {
+    "pred": "composite",
+    "parse_fail": false,
+    "prompt_version": "v1-classify",
+    "classify_session": "session-516aca68-9893-495a-aff7-c29b76c14bce"
+  },
+  "plan_only": false,
+  "dispatch": null,
+  "decision": "escalate: composite——需求含多领域子任务，拆分/并行/汇总为 P2 能力，P1 不执行；请拆分后分别提交或等 P2"
+}

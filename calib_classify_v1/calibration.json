@@ -1,0 +1,8 @@
+{
+  "judge": "baidu/qianfan-code-latest",
+  "prompt_version": "v1-classify",
+  "n_gold": 24,
+  "fnr": 0.0833,
+  "fpr": 0.0,
+  "gold_distribution_note": "classify-judge gold v1（真值 by construction，无人工标注）：24 条 = 单一领域 12（四类各 3）+ composite 6（双领域连接构造）+ clarify 6（冻结歧义 + 模糊构造）；ARS 门采用升级检测二值视图（positive={composite,clarify}）；初版即达标无需迭代。次级指标：六分类 exact=23/24（0.958），唯一错例 c20='这个版本的质量怎么样？'（与 routing-judge g18 同一边界样本，两类 judge 一致失手，表面形式真歧义）。已知边界：FNR 1/12 边缘值，正式启用前建议扩 gold set。"
+}

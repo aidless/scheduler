@@ -1,0 +1,20 @@
+{
+  "task_id": "t1787022035",
+  "need": "Python 里怎么用 dataclass 定义一个带默认值的类？给个简短示例。",
+  "classify": {
+    "pred": "standard",
+    "parse_fail": false,
+    "prompt_version": "v1-classify",
+    "classify_session": "session-848dae43-d1fa-4a3c-a615-73f1389f76f9"
+  },
+  "plan_only": false,
+  "dispatch": {
+    "preset": "standard",
+    "answer": "Python 的 `dataclass` 通过给字段直接赋默认值即可。简短示例：\n\n```python\nfrom dataclasses import dataclass\n\n@dataclass\nclass User:\n    name: str = \"匿名\"\n    age: int = 0\n    role: str = \"guest\"\n    active: bool = True\n\n# 不传参 → 全部用默认值\nu1 = User()\nprint(u1)        # User(name='匿名', age=0, role='guest', active=True)\n\n# 传部分参数，其余用默认值\nu2 = User(name=\"Alice\", age=30)\nprint(u2)        # User(name='Alice', age=30, role='guest', active=True)\n```\n\n几个要点：\n\n- **默认值按声明顺序**：有默认值的字段后面不能再跟无默认值的字段，否则会报 `TypeError: non-default argument follows default argument`。\n- **可变默认值（如 `list`/`dict`）**不能直接写，因为它是类属性、会被所有实例共享。应改用 `field(default_factory=...)`：\n\n```python\nfrom dataclasses import dataclass, field\n\n@dataclass\nclass User:\n    name: str = \"匿名\"\n    tags: list[str] = field(default_factory=list)   # 正确：每次新建空列表\n\nu = User(tags=[\"vip\"])\nprint(u)   # User(name='匿名', tags=['vip'])\n```\n\n- `dataclass` 默认生成 `__init__` / `__repr__` / `__eq__`，所以上面的实例能直接打印和比较，无需手写。",
+    "steps": 1,
+    "status": "ok",
+    "sessionId": "session-08e897f2-85c1-467a-9054-b15913249312",
+    "retries": 0
+  },
+  "decision": "routed:standard status=ok"
+}

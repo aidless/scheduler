@@ -1,0 +1,16 @@
+{
+  "mode": "binary",
+  "n": 32,
+  "agreement": 0.9375,
+  "kappa": 0.8667,
+  "judge_fnr_vs_human": 0.0833,
+  "judge_fpr_vs_human": 0.05,
+  "confusion": {
+    "tp": 11,
+    "fn": 1,
+    "fp": 1,
+    "tn": 19
+  },
+  "gate": "PASS",
+  "gate_rule": "binary: kappa>=0.6 or agreement>=0.8"
+}

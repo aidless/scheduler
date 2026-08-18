@@ -1,0 +1,243 @@
+{
+  "gold_set": "classify-judge v1",
+  "task": "需求六分类（四个单一处理者 + composite + clarify）",
+  "truth_source": "construction（冻结题集真值 + 确定性连接/模糊构造规则，无人工标注）",
+  "escalation_view": "positive={composite,clarify} negative=单一领域（ARS 二值门用）",
+  "n": 32,
+  "counts": {
+    "research-collab": 5,
+    "qa-gate": 5,
+    "daily-assistant": 5,
+    "standard": 5,
+    "composite": 6,
+    "clarify": 6
+  },
+  "escalation_pos": 12,
+  "escalation_neg": 20,
+  "items": [
+    {
+      "sample_id": "c01",
+      "source": "R7",
+      "need": "查一下这个方向最近两年有没有相关研究发表，归纳一张方法对比表。",
+      "gold": "research-collab",
+      "gold_rule": "frozen-task-gold"
+    },
+    {
+      "sample_id": "c02",
+      "source": "R9",
+      "need": "要验证这个假设需要多大的统计功效？帮我算出所需样本量。",
+      "gold": "research-collab",
+      "gold_rule": "frozen-task-gold"
+    },
+    {
+      "sample_id": "c03",
+      "source": "R10",
+      "need": "给审稿人的第二轮意见写一份针对实验部分的回应，引用我们的消融证据。",
+      "gold": "research-collab",
+      "gold_rule": "frozen-task-gold"
+    },
+    {
+      "sample_id": "c04",
+      "source": "E2",
+      "need": "我想用 LLM 当评估器给回复打分，先确认这个 judge 可不可信。",
+      "gold": "qa-gate",
+      "gold_rule": "frozen-task-gold"
+    },
+    {
+      "sample_id": "c05",
+      "source": "E4",
+      "need": "我改了一个技能的提示词，帮我设计同预算 A/B 决定这个改动收不收。",
+      "gold": "qa-gate",
+      "gold_rule": "frozen-task-gold"
+    },
+    {
+      "sample_id": "c06",
+      "source": "E5",
+      "need": "检查交付包的证据清单有没有缺口，重算哈希并对账。",
+      "gold": "qa-gate",
+      "gold_rule": "frozen-task-gold"
+    },
+    {
+      "sample_id": "c07",
+      "source": "D2",
+      "need": "这个 5000 行的开支 CSV 帮我清洗一下，按月汇总成表格。",
+      "gold": "daily-assistant",
+      "gold_rule": "frozen-task-gold"
+    },
+    {
+      "sample_id": "c08",
+      "source": "D4",
+      "need": "写个定时备份我文档文件夹的 PowerShell 脚本，每天凌晨跑。",
+      "gold": "daily-assistant",
+      "gold_rule": "frozen-task-gold"
+    },
+    {
+      "sample_id": "c09",
+      "source": "D5",
+      "need": "把这 10 个 Word 文档转成 PDF 再合并成一份。",
+      "gold": "daily-assistant",
+      "gold_rule": "frozen-task-gold"
+    },
+    {
+      "sample_id": "c10",
+      "source": "C2",
+      "need": "我的 React 组件渲染了两次，帮我定位并修掉。",
+      "gold": "standard",
+      "gold_rule": "frozen-task-gold"
+    },
+    {
+      "sample_id": "c11",
+      "source": "C3",
+      "need": "实现一个线程安全的 LRU 缓存类，带完整接口注释。",
+      "gold": "standard",
+      "gold_rule": "frozen-task-gold"
+    },
+    {
+      "sample_id": "c12",
+      "source": "C5",
+      "need": "CI 流水线在 lint 这一步总失败，把代码风格问题修掉。",
+      "gold": "standard",
+      "gold_rule": "frozen-task-gold"
+    },
+    {
+      "sample_id": "c13",
+      "source": "R1+D1",
+      "need": "先帮我写 TMLR 论文的 Methods 部分，所有数字必须能从逐种子结果追溯，再把 200 张照片批量重命名成日期加地点的格式。",
+      "gold": "composite",
+      "gold_rule": "construction:two-domain-conjunction"
+    },
+    {
+      "sample_id": "c14",
+      "source": "E1+C1",
+      "need": "先投稿前验证 refs.bib 里 40 条参考文献的真实性与结果有效性，再重构这个 Python 模块的循环导入，并补上单元测试。",
+      "gold": "composite",
+      "gold_rule": "construction:two-domain-conjunction"
+    },
+    {
+      "sample_id": "c15",
+      "source": "D2+R3",
+      "need": "先这个 5000 行的开支 CSV 帮我清洗一下，按月汇总成表格，再对两组各 30 个种子的指标做配对检验，报告效应量和置信区间，APA 格式。",
+      "gold": "composite",
+      "gold_rule": "construction:two-domain-conjunction"
+    },
+    {
+      "sample_id": "c16",
+      "source": "C2+E2",
+      "need": "先我的 React 组件渲染了两次，帮我定位并修掉，再我想用 LLM 当评估器给回复打分，先确认这个 judge 可不可信。",
+      "gold": "composite",
+      "gold_rule": "construction:two-domain-conjunction"
+    },
+    {
+      "sample_id": "c17",
+      "source": "R4+D3",
+      "need": "先写一封 rebuttal letter，逐条回应三位审稿人的意见并标注修改位置，再搜一下最新的赴日签证材料要求，整理成一页摘要。",
+      "gold": "composite",
+      "gold_rule": "construction:two-domain-conjunction"
+    },
+    {
+      "sample_id": "c18",
+      "source": "E3+C3",
+      "need": "先对论文终稿逐项过一遍 TMLR 投稿合规自查，再实现一个线程安全的 LRU 缓存类，带完整接口注释。",
+      "gold": "composite",
+      "gold_rule": "construction:two-domain-conjunction"
+    },
+    {
+      "sample_id": "c19",
+      "source": "X1",
+      "need": "帮我处理一下那个文件。",
+      "gold": "clarify",
+      "gold_rule": "frozen-ambiguous"
+    },
+    {
+      "sample_id": "c20",
+      "source": "X2",
+      "need": "看看实验结果怎么样了。",
+      "gold": "clarify",
+      "gold_rule": "frozen-ambiguous"
+    },
+    {
+      "sample_id": "c21",
+      "source": "X3",
+      "need": "帮我看看昨天那个东西。",
+      "gold": "clarify",
+      "gold_rule": "frozen-ambiguous"
+    },
+    {
+      "sample_id": "c22",
+      "source": "X4",
+      "need": "这个版本的质量怎么样？",
+      "gold": "clarify",
+      "gold_rule": "frozen-ambiguous"
+    },
+    {
+      "sample_id": "c23",
+      "source": "constructed",
+      "need": "帮我弄一下那个。",
+      "gold": "clarify",
+      "gold_rule": "construction:模糊指代（那个，无上下文）"
+    },
+    {
+      "sample_id": "c24",
+      "source": "constructed",
+      "need": "上次说的事情办得怎么样了？",
+      "gold": "clarify",
+      "gold_rule": "construction:缺上下文（上次/事情均无指代）"
+    },
+    {
+      "sample_id": "c25",
+      "source": "constructed",
+      "need": "写论文的 related work 部分有什么技巧？",
+      "gold": "research-collab",
+      "gold_rule": "construction:advisory:research"
+    },
+    {
+      "sample_id": "c26",
+      "source": "constructed",
+      "need": "效应量和置信区间应该怎么报告才规范？",
+      "gold": "research-collab",
+      "gold_rule": "construction:advisory:research"
+    },
+    {
+      "sample_id": "c27",
+      "source": "constructed",
+      "need": "引用验证一般要核查哪几项内容？",
+      "gold": "qa-gate",
+      "gold_rule": "construction:advisory:qa"
+    },
+    {
+      "sample_id": "c28",
+      "source": "constructed",
+      "need": "怎么判断一个 A/B 实验的预算是否等价？",
+      "gold": "qa-gate",
+      "gold_rule": "construction:advisory:qa"
+    },
+    {
+      "sample_id": "c29",
+      "source": "constructed",
+      "need": "批量重命名文件有什么省事的办法？",
+      "gold": "daily-assistant",
+      "gold_rule": "construction:advisory:daily"
+    },
+    {
+      "sample_id": "c30",
+      "source": "constructed",
+      "need": "把一堆 PDF 合并成一个有什么好工具？",
+      "gold": "daily-assistant",
+      "gold_rule": "construction:advisory:daily"
+    },
+    {
+      "sample_id": "c31",
+      "source": "constructed",
+      "need": "Python 的装饰器一般用在什么场景？",
+      "gold": "standard",
+      "gold_rule": "construction:advisory:standard"
+    },
+    {
+      "sample_id": "c32",
+      "source": "constructed",
+      "need": "单元测试的覆盖率多少算合适？",
+      "gold": "standard",
+      "gold_rule": "construction:advisory:standard"
+    }
+  ]
+}

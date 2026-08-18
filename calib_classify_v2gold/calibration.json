@@ -1,0 +1,8 @@
+{
+  "judge": "baidu/qianfan-code-latest",
+  "prompt_version": "v1-classify",
+  "n_gold": 32,
+  "fnr": 0.0833,
+  "fpr": 0.05,
+  "gold_distribution_note": "classify-judge gold v2（真值 by construction，无人工标注）：32 条 = 单一领域任务 12 + 咨询型提问 8（四类各 2，smoke s2 误路由后扩容）+ composite 6 + clarify 6；ARS 门用升级检测二值视图（positive={composite,clarify}）。已知边界：① c20='这个版本的质量怎么样？' 在 routing-judge（g18）与 classify-judge 三轮中一致误判，表面形式真歧义；② 观测到 run-to-run 方差（E2 条目两轮校准间翻转，部署非确定性采样），FNR/FPR 为带噪声估计，余量有限，建议定期复校；③ 咨询型分布无专门提示词规则下 7/8 自然正确。"
+}

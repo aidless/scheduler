@@ -1,0 +1,98 @@
+[
+  {
+    "ts": "2026-08-18T02:58:55.463359+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-60c2b1a7-b172-449b-b8ac-6e09af8777b8",
+    "need": "写论文时如何在结果部分报告效应量？给我一个 APA 格式的示例。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T02:58:55.614864+00:00",
+    "purpose": "dispatch",
+    "preset": "research-collab",
+    "sessionId": "session-43fa3c12-ebf0-4095-b89d-adb7598e5a13",
+    "need": "写论文时如何在结果部分报告效应量？给我一个 APA 格式的示例。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T02:59:40.919942+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-85f44ee8-e1c7-4488-844f-a9f50eb48e85",
+    "need": "如果我要校准一个 LLM judge，FNR 和 FPR 的验收阈值应该是多少？",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T02:59:40.998822+00:00",
+    "purpose": "dispatch",
+    "preset": "research-collab",
+    "sessionId": "session-abb68bf0-b969-4439-8197-aa8c61333dcd",
+    "need": "如果我要校准一个 LLM judge，FNR 和 FPR 的验收阈值应该是多少？",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T03:00:14.251019+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-03a026c8-210d-491b-bf2a-7598f127e5bc",
+    "need": "帮我列一个整理电脑下载文件夹的步骤清单，只要清单，不要实际执行任何操作。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T03:00:14.482964+00:00",
+    "purpose": "dispatch",
+    "preset": "daily-assistant",
+    "sessionId": "session-b18165e2-c12a-4655-80c8-8f2402f740b9",
+    "need": "帮我列一个整理电脑下载文件夹的步骤清单，只要清单，不要实际执行任何操作。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T03:00:42.931839+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-848dae43-d1fa-4a3c-a615-73f1389f76f9",
+    "need": "Python 里怎么用 dataclass 定义一个带默认值的类？给个简短示例。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T03:00:44.114819+00:00",
+    "purpose": "dispatch",
+    "preset": "standard",
+    "sessionId": "session-08e897f2-85c1-467a-9054-b15913249312",
+    "need": "Python 里怎么用 dataclass 定义一个带默认值的类？给个简短示例。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T03:00:58.792640+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-516aca68-9893-495a-aff7-c29b76c14bce",
+    "need": "先给我写一个冒泡排序函数，再帮我整理一份会议纪要模板。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T03:01:04.200123+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-e6b9ffa0-8dde-4ab9-949b-33af4502e880",
+    "need": "帮我把那个处理一下。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T03:11:22.109872+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-d51ccb48-1989-43e6-9ef2-ca5da55c4c24",
+    "need": "如果我要校准一个 LLM judge，FNR 和 FPR 的验收阈值应该是多少？",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T03:11:23.334796+00:00",
+    "purpose": "dispatch",
+    "preset": "qa-gate",
+    "sessionId": "session-5858f7c1-ccf1-41a8-bbb1-c0872d8bf069",
+    "need": "如果我要校准一个 LLM judge，FNR 和 FPR 的验收阈值应该是多少？",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  }
+]
