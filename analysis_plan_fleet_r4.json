@@ -1,0 +1,47 @@
+{
+  "plan_id": "fleet-r4",
+  "preregistered_at": "2026-08-18",
+  "status": "frozen",
+  "predecessor": "fleet-r3/P3 model-map-v1：编码 A/B 12/12 双臂全过（ceiling effect）→ keep_with_disclosure，未能定论映射是否更优",
+
+  "hypothesis": "在难度足够（非天花板）的编码任务上，代码专精模型（baidu/qianfan-code-latest）的通过率不低于、且可能高于旗舰通用模型（china/Qwen3.8-Max）。",
+  "motivation": "fleet-r3 任务太易，两臂都满分，McNemar 无分裂对，统计无法区分模型。本用难度梯度题集制造真实错误率差异，把'模型映射是否有益'从 keep_with_disclosure 推进到可定论。",
+
+  "arms": {
+    "A_mapped": "baidu/qianfan-code-latest（代码专精，model_map v1 的映射目标）",
+    "B_default": "china/Qwen3.8-Max（旗舰通用，standard preset 默认）"
+  },
+  "session": "两臂均在 standard preset 会话，仅 selectModel 不同（单因素：模型）",
+
+  "tasks": {
+    "n": 16,
+    "design": "难度梯度：medium~hard 算法/数据结构题（滑窗/双指针/DP/图/LRU/Trie 等），均为纯函数或明确定义的类，配确定性测试断言；参考实现先自校验（validate_coding_r4_tests.py ALL PASS 才进 A/B）",
+    "file": "coding_r4_tasks.json",
+    "anti_ceiling": "故意纳入 hard 题（edit distance/trapping rain water/LRU/序列化类），确保两臂都可能犯错，产生分裂对"
+  },
+
+  "scoring": {
+    "method": "提取模型输出的 python 代码块 → 拼接该任务的确定性断言 → 运行 → 退出码 0 且打印 TESTS_OK = pass，否则 fail",
+    "extraction_fail": "提取不到代码块 = fail（错误计入分母纪律）",
+    "deterministic": "判分无 LLM，纯断言，双臂同一套断言"
+  },
+
+  "statistic": {
+    "primary": "exact McNemar（配对单位=同任务双臂），双侧 α=0.05",
+    "secondary": "两臂各自通过率 acc_A/acc_B；分裂对 b(A过B挂)/c(A挂B过)",
+    "power_declaration": "L100/L116 纪律：n=16，若真实分裂率~30-40% 且方向偏倚≥3:1，可望 b≥6,c≤1 达 p<0.05；若两臂仍同分（全过或同错）则继续无分裂 → 如实报'仍无法定论'。本实验定位=尽力制造分裂以定论，结果不预设方向。"
+  },
+
+  "decision_rule": {
+    "promote_mapping": "p<0.05 且 b>c（映射显著更优）→ 确认 model_map 编码映射有益",
+    "rollback_mapping": "p<0.05 且 c>b（映射显著更差）→ 撤销编码映射，standard 回默认模型",
+    "keep_with_disclosure": "p≥0.05 或无分裂对 → 维持现状并披露（不劣化但无优势证据）"
+  },
+
+  "claim_boundary": [
+    "只测'编码任务上代码专精模型 vs 旗舰通用模型的通过率差异'",
+    "不外推到推理/写作/科研任务，不声称成本/延迟差异",
+    "单 seed 单轮；任务集为本环境构造，非标准基准（非 HumanEval/MBPP）"
+  ],
+  "deviation_policy": "跑前冻结；若某任务两臂都因题面歧义挂，事后剔除须声明并重算，不得选择性剔除。"
+}

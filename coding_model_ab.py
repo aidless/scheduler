@@ -168,13 +168,17 @@ def exact_mcnemar_p(b: int, c: int) -> float:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", type=Path, default=HERE / "coding_ab_results.json")
+    ap.add_argument("--tasks", type=Path, default=HERE / "coding_ab_tasks.json",
+                    help="任务集 JSON（fleet-r4 用 coding_r4_tasks.json）")
+    ap.add_argument("--work", type=Path, default=None,
+                    help="被测代码留档目录（缺省 ab_work）")
     ap.add_argument("--timeout", type=int, default=300)
     ap.add_argument("--pace", type=float, default=5.0)
     args = ap.parse_args()
 
-    spec = json.loads((HERE / "coding_ab_tasks.json").read_text(encoding="utf-8"))
+    spec = json.loads(args.tasks.read_text(encoding="utf-8"))
     tasks, framing = spec["tasks"], spec["framing"]
-    work = HERE / "ab_work"
+    work = args.work if args.work is not None else HERE / "ab_work"
     results = []
     total = len(tasks) * 2
     for i, task in enumerate(tasks):

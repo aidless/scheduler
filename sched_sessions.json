@@ -270,5 +270,21 @@
     "sessionId": "session-0a016cac-cdb1-4da2-aa9e-3a040c4fe1d5",
     "need": "帮我把那个东西弄一下。",
     "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T04:53:35.387900+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-47642fb1-9a94-4472-9941-694464c575a4",
+    "need": "写一个 Python 函数 is_prime(n)，判断 n 是否为素数，并附两个测试断言（assert）。要求：函数正确处理边界情况（n<2 返回 False），使用试除法即可；两个测试断言一个覆盖素数、一个覆盖非素数或边界。交付代码文件。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T04:53:35.440710+00:00",
+    "purpose": "dispatch",
+    "preset": "standard",
+    "sessionId": "session-dbc0722c-4fe0-484c-9038-46b54e409710",
+    "need": "写一个 Python 函数 is_prime(n)，判断 n 是否为素数，并附两个测试断言（assert）。要求：函数正确处理边界情况（n<2 返回 False），使用试除法即可；两个测试断言一个覆盖素数、一个覆盖非素数或边界。交付代码文件。",
+    "policy": "no-auto-delete（清理须用户裁决）"
   }
 ]

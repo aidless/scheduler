@@ -27,6 +27,15 @@
     }
   },
 
+  "validation_history": {
+    "fleet_r3_p3": {"tasks": 6, "level": "简单", "acc_A": 1.0, "acc_B": 1.0,
+                    "b": 0, "c": 0, "p": 1.0, "verdict": "ceiling effect，无法定论"},
+    "fleet_r4": {"tasks": 16, "level": "难度梯度 medium~hard（含 LRU/Trie/编辑距离/接雨水/岛屿/课程表）",
+                 "acc_A": 1.0, "acc_B": 1.0, "b": 0, "c": 0, "p": 1.0,
+                 "verdict": "两臂 16/16 全过，再次触顶，无法区分"},
+    "final_decision": "keep_with_disclosure（两轮触顶）：编码任务上代码专精模型 vs 旗舰通用模型无可检出差异；standard→qianfan-code-latest 映射保持 opt-in（无害但不必要，无实证收益）；报告见 fleet_r4_report.md"
+  },
+
   "claim_boundary": [
     "本验证只覆盖编码任务类型的模型映射（standard preset）",
     "不声称其他任务类型有任何模型收益（默认保持即无主张）",
