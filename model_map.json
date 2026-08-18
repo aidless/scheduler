@@ -5,8 +5,7 @@
   "mechanism_evidence": "verify_select_model.py: selectModel→current 更新→request/header 实际路由=目标模型（EFFECTIVE）",
 
   "mapping": {
-    "standard": {"provider": "baidu", "model": "qianfan-code-latest",
-                 "rationale": "代码专精模型；单回合派发不受 token-plan RPM 限制影响（每任务 1-3 次调用），退避机制已内建（L102）"},
+    "standard": null,
     "research-collab": null,
     "qa-gate": null,
     "daily-assistant": null

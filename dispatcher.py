@@ -41,6 +41,9 @@ def _prompt_turn(text: str, preset: str, timeout_s: int, title: str) -> tuple:
             rpc("session.rename", {"sessionId": sid, "title": title})
         except Exception:  # noqa: BLE001
             pass
+        # 切到 china/Qwen3.8-Max（脱离 baidu RPM 限制；minimal preset 默认走 baidu）
+        rpc("session.selectModel", {"sessionId": sid,
+                                    "provider": "china", "model": "Qwen3.8-Max"})
         for attempt in range(len(backoffs) + 1):
             events_before = all_events(sid)
             before_turns = sum(1 for e in events_before if e.get("type") == "turn/end")

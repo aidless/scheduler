@@ -1,0 +1,8 @@
+{
+  "judge": "china/Qwen3.8-Max",
+  "prompt_version": "v1-classify",
+  "n_gold": 32,
+  "fnr": 0.0,
+  "fpr": 0.05,
+  "gold_distribution_note": "classify-judge gold v2（真值 by construction）：32 条。从 baidu/qianfan-code-latest 迁移到 china/Qwen3.8-Max 重校准。FNR 从 0.083 改善到 0.0（baidu 上 c20=X2 误判被 china 正确识别），FPR 不变 0.05。κ 从 0.8667 提升到 0.9344。唯一 FP 为 c01（research-collab 任务被误判 clarify，边界样本）。迁移原因：baidu token plan 有 3-5 RPM 硬限制（L102），china 无限制。"
+}

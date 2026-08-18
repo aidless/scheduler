@@ -116,6 +116,9 @@ def classify_one(item: dict, preset: str, timeout_s: int, tag: str) -> dict:
                                    "title": f"{tag} {item['sample_id']}"})
         except Exception:  # noqa: BLE001
             pass
+        # 切到 china/Qwen3.8-Max（脱离 baidu RPM 限制）
+        rpc("session.selectModel", {"sessionId": sid,
+                                    "provider": "china", "model": "Qwen3.8-Max"})
         for attempt in range(len(BACKOFFS) + 1):
             events_before = all_events(sid)
             before_turns = sum(1 for e in events_before if e.get("type") == "turn/end")
