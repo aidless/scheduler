@@ -246,5 +246,29 @@
     "sessionId": "session-d3aff1e9-bc8d-46bb-8bb9-82c24ec2095b",
     "need": "写一个函数，把驼峰命名转成下划线命名。",
     "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T03:56:36.373470+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-3ba02ff8-7337-42d7-bd9c-0179f1ec1628",
+    "need": "把 F:\\deepseek\\agent-群架构 目录下的 .md 文件列一个清单，按文件名排序。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T03:56:36.477919+00:00",
+    "purpose": "dispatch",
+    "preset": "daily-assistant",
+    "sessionId": "session-c28fb14e-3152-45ae-8eed-607a30b8d1f2",
+    "need": "把 F:\\deepseek\\agent-群架构 目录下的 .md 文件列一个清单，按文件名排序。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T03:57:39.380328+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-0a016cac-cdb1-4da2-aa9e-3a040c4fe1d5",
+    "need": "帮我把那个东西弄一下。",
+    "policy": "no-auto-delete（清理须用户裁决）"
   }
 ]

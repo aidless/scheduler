@@ -1,0 +1,14 @@
+{
+  "task_id": "t1787025454",
+  "need": "帮我把那个东西弄一下。",
+  "classify": {
+    "pred": "clarify",
+    "parse_fail": false,
+    "prompt_version": "v1-classify",
+    "classify_session": "session-0a016cac-cdb1-4da2-aa9e-3a040c4fe1d5"
+  },
+  "plan_only": false,
+  "dispatch": null,
+  "decision": "escalate: clarify——需求信息不足或指代不明，请补充：对象是哪个？要做什么？标准是什么？（路由表纪律：不猜）",
+  "model_map": true
+}

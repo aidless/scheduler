@@ -1,0 +1,22 @@
+{
+  "task_id": "t1787025394",
+  "need": "把 F:\\deepseek\\agent-群架构 目录下的 .md 文件列一个清单，按文件名排序。",
+  "classify": {
+    "pred": "daily-assistant",
+    "parse_fail": false,
+    "prompt_version": "v1-classify",
+    "classify_session": "session-3ba02ff8-7337-42d7-bd9c-0179f1ec1628"
+  },
+  "plan_only": false,
+  "dispatch": {
+    "preset": "daily-assistant",
+    "answer": "已在 `F:\\deepseek\\agent-群架构` 下找到 **48 个 .md 文件**。下面按**文件名（basename）**排序，同名文件归到一组、组内再按路径排序。路径均相对于 `F:\\deepseek\\agent-群架构\\`。\n\n### 1. `ARCHITECTURE.md`（1）\n- `ARCHITECTURE.md`\n\n### 2. `daily-assistant-probe.md`（1）\n- `probes\\daily-assistant-probe.md`\n\n### 3. `group_health.md`（15）\n- `.verify\\final_sweep\\health\\group_health.md`\n- `.verify\\final_sweep\\v2_combo\\group_health\\group_health.md`\n- `.verify\\health_p2\\group_health.md`\n- `.verify\\health_p3\\group_health.md`\n- `.verify\\health_p5\\group_health.md`\n- `.verify\\health_post_fleet\\group_health.md`\n- `.verify\\health_promote\\group_health.md`\n- `.verify\\health_real\\group_health.md`\n- `.verify\\health_sched\\group_health.md`\n- `.verify\\health_v2\\group_health.md`\n- `.verify\\qa_smoke_ext\\group_health\\group_health.md`\n- `.verify\\regression_r2\\health\\group_health.md`\n- `.verify\\regression_r2\\health2\\group_health.md`\n- `.verify\\regression_r2\\health3\\group_health.md`\n- `.verify\\regression_r2\\qa\\group_health\\group_health.md`\n\n### 4. `judge_calibration_gate.md`（4）\n- `.verify\\e2e_calib\\judge_calibration_gate.md`\n- `.verify\\final_sweep\\v2_combo\\judge_calibration_gate.md`\n- `.verify\\v2_smoke\\jc_fail\\judge_calibration_gate.md`\n- `.verify\\v2_smoke\\jc_pass\\judge_calibration_gate.md`\n\n### 5. `qa-gate-probe.md`（1）\n- `probes\\qa-gate-probe.md`\n\n### 6. `README.md`（1）\n- `probes\\README.md`\n\n### 7. `report.md`（16）\n- `.verify\\e2e_calib\\report.md`\n- `.verify\\final_sweep\\compat\\report.md`\n- `.verify\\final_sweep\\v2_combo\\report.md`\n- `.verify\\probe_qa\\report.md`\n- `.verify\\probe_qa_session\\report.md`\n- `.verify\\qa_smoke\\report.md`\n- `.verify\\qa_smoke_compat\\report.md`\n- `.verify\\qa_smoke_ext\\report.md`\n- `.verify\\regression_r2\\qa\\report.md`\n- `.verify\\v2_smoke\\compat\\report.md`\n- `.verify\\v2_smoke\\contract\\report.md`\n- `.verify\\v2_smoke\\jc_fail\\report.md`\n- `.verify\\v2_smoke\\jc_pass\\report.md`\n- `.verify\\v2_smoke\\jp_fail\\report.md`\n- `.verify\\v2_smoke\\jp_pass\\report.md`\n- `.verify\\v2_smoke\\tmlr\\report.md`\n\n### 8. `SCHEDULER_DESIGN.md`（1）\n- `SCHEDULER_DESIGN.md`\n\n### 9. `tmlr_compliance.md`（2）\n- `.verify\\final_sweep\\v2_combo\\tmlr_compliance.md`\n- `.verify\\v2_smoke\\tmlr\\tmlr_compliance.md`\n\n### 10. `transcript_daily-assistant_A1.md`（1）\n- `.verify\\p1_probe_sessions\\transcript_daily-assistant_A1.md`\n\n### 11. `transcript_daily-assistant_A2.md`（1）\n- `.verify\\p1_probe_sessions\\transcript_daily-assistant_A2.md`\n\n### 12. `transcript_daily-assistant_A3.md`（1）\n- `.verify\\p1_probe_sessions\\transcript_daily-assistant_A3.md`\n\n### 13. `transcript_qa-gate_B1.md`（1）\n- `.verify\\p1_probe_sessions\\transcript_qa-gate_B1.md`\n\n### 14. `transcript_qa-gate_B2.md`（1）\n- `.verify\\p1_probe_sessions\\transcript_qa-gate_B2.md`\n\n### 15. `transcript_qa-gate_B3.md`（1）\n- `.verify\\p1_probe_sessions\\transcript_qa-gate_B3.md`\n\n---\n\n几点观察：\n- 顶层实际只有 **3 个**「正经」文档：`ARCHITECTURE.md`、`SCHEDULER_DESIGN.md`、`probes\\README.md`，外加两个 probe 文件。\n- 其余 **43 个**全在 `.verify\\` 下，是各类校验/冒烟/回归运行的产物，且高度重复（`report.md` 出现 16 次、`group_health.md` 15 次）。\n\n如果你想要的是一份不含 `.verify\\` 校验产物的「文档清单」，告诉我，我可以只列顶层与 `probes\\` 下的。",
+    "steps": 2,
+    "status": "ok",
+    "sessionId": "session-c28fb14e-3152-45ae-8eed-607a30b8d1f2",
+    "retries": 0,
+    "model": null
+  },
+  "decision": "routed:daily-assistant status=ok",
+  "model_map": true
+}
