@@ -1,0 +1,125 @@
+{
+  "plan_id": "model-map-v1",
+  "summary": {
+    "n_tasks": 6,
+    "acc_A_mapped": 1.0,
+    "acc_B_default": 1.0,
+    "b_Awin": 0,
+    "c_Bwin": 0,
+    "ties_win": 6,
+    "ties_lose": 0,
+    "p_exact": 1.0,
+    "decision": "keep_with_disclosure",
+    "note": "预注册 model-map-v1 决定规则；n=6 功效有限（见 power_declaration）"
+  },
+  "results": [
+    {
+      "task_id": "m1",
+      "arm": "A",
+      "pass": 1,
+      "status": "ok",
+      "extracted": true,
+      "sessionId": "session-0cf0f1df-bcfa-4c7c-b9d0-e5894d83e999",
+      "retries": 0
+    },
+    {
+      "task_id": "m1",
+      "arm": "B",
+      "pass": 1,
+      "status": "ok",
+      "extracted": true,
+      "sessionId": "session-a1af2ba5-628e-41a7-8bcc-8583b6a3941a",
+      "retries": 0
+    },
+    {
+      "task_id": "m2",
+      "arm": "B",
+      "pass": 1,
+      "status": "ok",
+      "extracted": true,
+      "sessionId": "session-d57c86f6-502f-4458-adf1-553bb64bff6b",
+      "retries": 0
+    },
+    {
+      "task_id": "m2",
+      "arm": "A",
+      "pass": 1,
+      "status": "ok",
+      "extracted": true,
+      "sessionId": "session-d028415b-88e5-4402-b6bb-75d89522f707",
+      "retries": 0
+    },
+    {
+      "task_id": "m3",
+      "arm": "A",
+      "pass": 1,
+      "status": "ok",
+      "extracted": true,
+      "sessionId": "session-f561eb70-f36b-4122-b75c-d4a28614d0e6",
+      "retries": 0
+    },
+    {
+      "task_id": "m3",
+      "arm": "B",
+      "pass": 1,
+      "status": "ok",
+      "extracted": true,
+      "sessionId": "session-d6b845d3-e669-4ebd-ac47-80e930cfb647",
+      "retries": 0
+    },
+    {
+      "task_id": "m4",
+      "arm": "B",
+      "pass": 1,
+      "status": "ok",
+      "extracted": true,
+      "sessionId": "session-b2f9760f-bd8b-4920-b32c-af7ac626a1ff",
+      "retries": 0
+    },
+    {
+      "task_id": "m4",
+      "arm": "A",
+      "pass": 1,
+      "status": "ok",
+      "extracted": true,
+      "sessionId": "session-5efe10ad-0710-4254-ac9b-64378d0b89bf",
+      "retries": 0
+    },
+    {
+      "task_id": "m5",
+      "arm": "A",
+      "pass": 1,
+      "status": "ok",
+      "extracted": true,
+      "sessionId": "session-277bc70f-2a7a-43dd-b642-483918b42d50",
+      "retries": 0
+    },
+    {
+      "task_id": "m5",
+      "arm": "B",
+      "pass": 1,
+      "status": "ok",
+      "extracted": true,
+      "sessionId": "session-856bc593-12da-459a-bb7a-f15092167e43",
+      "retries": 0
+    },
+    {
+      "task_id": "m6",
+      "arm": "B",
+      "pass": 1,
+      "status": "ok",
+      "extracted": true,
+      "sessionId": "session-1b432a02-e6d6-42fe-a0c2-68c544c28f4c",
+      "retries": 0
+    },
+    {
+      "task_id": "m6",
+      "arm": "A",
+      "pass": 1,
+      "status": "ok",
+      "extracted": true,
+      "sessionId": "session-925bb6bf-e905-4863-8a3b-b89218932f12",
+      "retries": 0
+    }
+  ]
+}

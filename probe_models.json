@@ -1,0 +1,192 @@
+{
+  "probed_at": "2026-08-18 11:37:11",
+  "session": "session-18ca9957-f4cf-4549-9d5f-b87f4a005149",
+  "models": {
+    "current": {
+      "provider": "china",
+      "model": "Qwen3.8-Max"
+    },
+    "routable": true,
+    "groups": [
+      {
+        "id": "deepseek-official",
+        "name": "DeepSeek",
+        "models": [
+          {
+            "id": "deepseek-v4-flash",
+            "name": "DeepSeek-V4-Flash",
+            "reasoning": {
+              "efforts": [
+                {
+                  "id": "off",
+                  "name": "Off"
+                },
+                {
+                  "id": "high",
+                  "name": "High"
+                },
+                {
+                  "id": "max",
+                  "name": "Max"
+                }
+              ],
+              "defaultEffort": "high"
+            }
+          },
+          {
+            "id": "deepseek-v4-pro",
+            "name": "DeepSeek-V4-Pro",
+            "reasoning": {
+              "efforts": [
+                {
+                  "id": "off",
+                  "name": "Off"
+                },
+                {
+                  "id": "high",
+                  "name": "High"
+                },
+                {
+                  "id": "max",
+                  "name": "Max"
+                }
+              ],
+              "defaultEffort": "high"
+            }
+          }
+        ]
+      },
+      {
+        "id": "opencode-go",
+        "name": "opencode-go",
+        "models": [
+          {
+            "id": "deepseek-v4-flash",
+            "name": "DeepSeek V4 Flash",
+            "reasoning": {
+              "efforts": [
+                {
+                  "id": "off",
+                  "name": "Off"
+                },
+                {
+                  "id": "high",
+                  "name": "High"
+                },
+                {
+                  "id": "max",
+                  "name": "Max"
+                }
+              ]
+            }
+          },
+          {
+            "id": "deepseek-v4-pro",
+            "name": "DeepSeek V4 Pro",
+            "reasoning": {
+              "efforts": [
+                {
+                  "id": "off",
+                  "name": "Off"
+                },
+                {
+                  "id": "high",
+                  "name": "High"
+                },
+                {
+                  "id": "max",
+                  "name": "Max"
+                }
+              ]
+            }
+          },
+          {
+            "id": "grok-4.5",
+            "name": "Grok 4.5",
+            "reasoning": {
+              "efforts": [
+                {
+                  "id": "low",
+                  "name": "Low"
+                },
+                {
+                  "id": "medium",
+                  "name": "Medium"
+                },
+                {
+                  "id": "high",
+                  "name": "High"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "huoshan",
+        "name": "huo",
+        "models": [
+          {
+            "id": "deepseek-v4-flash",
+            "name": "deepseek-v4-flash"
+          }
+        ]
+      },
+      {
+        "id": "ali",
+        "name": "ali",
+        "models": [
+          {
+            "id": "deepseek-v4-flash-0731",
+            "name": "deepseek-v4-flash-0731"
+          }
+        ]
+      },
+      {
+        "id": "baidu",
+        "name": "baidu",
+        "models": [
+          {
+            "id": "qianfan-code-latest",
+            "name": "qianfan-code-latest"
+          }
+        ]
+      },
+      {
+        "id": "china",
+        "name": "china",
+        "models": [
+          {
+            "id": "DeepSeek-V4-Flash-0731",
+            "name": "DeepSeek-V4-Flash-0731"
+          },
+          {
+            "id": "GLM-5.2-Base",
+            "name": "GLM-5.2-Base"
+          },
+          {
+            "id": "Qwen3.8-Max",
+            "name": "Qwen3.8-Max"
+          },
+          {
+            "id": "MiniMax-M3",
+            "name": "MiniMax-M3"
+          },
+          {
+            "id": "Kimi-K3",
+            "name": "Kimi-K3"
+          },
+          {
+            "id": "GLM-5.2",
+            "name": "GLM-5.2"
+          },
+          {
+            "id": "MiMo-V2.5-Pro",
+            "name": "MiMo-V2.5-Pro"
+          }
+        ]
+      }
+    ],
+    "failures": []
+  }
+}

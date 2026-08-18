@@ -1,0 +1,33 @@
+{
+  "preset": "standard",
+  "target": {
+    "provider": "baidu",
+    "model": "qianfan-code-latest"
+  },
+  "session": "session-973e2e22-ab05-4a1f-a3b8-d873f552c00d",
+  "before": {
+    "provider": "china",
+    "model": "Qwen3.8-Max"
+  },
+  "select_response": {
+    "selected": {
+      "provider": "baidu",
+      "model": "qianfan-code-latest"
+    }
+  },
+  "after": {
+    "provider": "baidu",
+    "model": "qianfan-code-latest"
+  },
+  "request_header_config": {
+    "provider": "baidu",
+    "model": "qianfan-code-latest"
+  },
+  "turn_completed": true,
+  "answer_head": "闭包是一个函数与其所引用的外部（自由）变量的组合体，使得该函数在离开定义作用域后仍能继续访问并持有那些外部变量。",
+  "actually_used": {
+    "provider": "baidu",
+    "model": "qianfan-code-latest"
+  },
+  "verdict": "EFFECTIVE"
+}

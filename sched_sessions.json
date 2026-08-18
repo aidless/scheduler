@@ -230,5 +230,21 @@
     "sessionId": "session-9d56b5cd-b5fc-4fc1-8ae8-083b18846f23",
     "need": "起草一份会议纪要模板",
     "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T03:47:39.130317+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-982f5a34-477c-4f21-a636-0e3f6365a7a5",
+    "need": "写一个函数，把驼峰命名转成下划线命名。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-18T03:47:39.488811+00:00",
+    "purpose": "dispatch",
+    "preset": "standard",
+    "sessionId": "session-d3aff1e9-bc8d-46bb-8bb9-82c24ec2095b",
+    "need": "写一个函数，把驼峰命名转成下划线命名。",
+    "policy": "no-auto-delete（清理须用户裁决）"
   }
 ]

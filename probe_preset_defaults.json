@@ -1,0 +1,34 @@
+{
+  "research-collab": {
+    "session": "session-551f8e9d-c4ca-4cd7-92f3-c69537f5bf8f",
+    "current": {
+      "provider": "china",
+      "model": "Qwen3.8-Max"
+    },
+    "routable": true
+  },
+  "qa-gate": {
+    "session": "session-156b3f35-bc3c-435c-badb-c10f69a2be41",
+    "current": {
+      "provider": "china",
+      "model": "Qwen3.8-Max"
+    },
+    "routable": true
+  },
+  "daily-assistant": {
+    "session": "session-c028b6ce-b317-47a8-90ed-d34c289a934d",
+    "current": {
+      "provider": "china",
+      "model": "Qwen3.8-Max"
+    },
+    "routable": true
+  },
+  "standard": {
+    "session": "session-ea560ff7-a022-4f3a-afbd-7b6fa2d19a17",
+    "current": {
+      "provider": "china",
+      "model": "Qwen3.8-Max"
+    },
+    "routable": true
+  }
+}

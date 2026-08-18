@@ -109,9 +109,10 @@ def register_session(purpose: str, preset: str, session_id: str, need: str) -> N
                         encoding="utf-8")
 
 
-def dispatch_single(need: str, preset: str, timeout_s: int) -> dict:
+def dispatch_single(need: str, preset: str, timeout_s: int,
+                    model: dict | None = None) -> dict:
     rec = {"preset": preset, "answer": "", "steps": 0, "status": "ok",
-           "sessionId": "", "retries": 0}
+           "sessionId": "", "retries": 0, "model": None}
     backoffs = [30, 60, 120, 240, 480]
     quota = ("429", "rate limit", "rate_limit", "quota", "token_plan")
     try:
@@ -122,6 +123,11 @@ def dispatch_single(need: str, preset: str, timeout_s: int) -> dict:
                                    "title": f"sched {preset[:6]} {need[:24]}"})
         except Exception:  # noqa: BLE001
             pass
+        if model:  # P3 模型匹配：selectModel 生效已验证（verify_select_model.py）
+            rpc("session.selectModel", {"sessionId": sid,
+                                        "provider": model["provider"],
+                                        "model": model["model"]})
+            rec["model"] = model
         register_session("dispatch", preset, sid, need)
         for attempt in range(len(backoffs) + 1):
             events_before = all_events(sid)
@@ -186,6 +192,9 @@ def main() -> int:
                     help="只出分类/拆分计划与预算预估，不执行投递")
     ap.add_argument("--resume", type=Path, default=None, metavar="STATE_JSON",
                     help="断点续跑：从 state.json 恢复，跳过 ok，重跑 pending/fail")
+    ap.add_argument("--use-model-map", action="store_true",
+                    help="P3：按 model_map.json 为 dispatched 会话 selectModel"
+                         "（judge/planner 会话不适用——校准谱系绑定）")
     ap.add_argument("--timeout", type=int, default=600)
     ap.add_argument("--out", type=Path, default=Path("sched_out"))
     args = ap.parse_args()
@@ -198,8 +207,18 @@ def main() -> int:
             return 1
         out_dir = args.resume.parent
         state["state_path"] = str(args.resume.resolve())
+        r_model_map = {}
+        if state.get("model_map"):
+            r_model_map = json.loads(
+                (Path(__file__).resolve().parent / "model_map.json")
+                .read_text(encoding="utf-8")).get("mapping", {})
+
+        def r_dispatch(text: str, preset: str, timeout_s: int) -> dict:
+            return dispatch_single(text, preset, timeout_s,
+                                   model=r_model_map.get(preset))
+
         before = {k: v["status"] for k, v in state["subtasks"].items()}
-        execute_plan(state, dispatch_single, args.timeout, out_dir)
+        execute_plan(state, r_dispatch, args.timeout, out_dir)
         agg = aggregate(state, out_dir)
         args.resume.write_text(json.dumps(state, ensure_ascii=False, indent=2),
                                encoding="utf-8")
@@ -230,11 +249,26 @@ def main() -> int:
     }
     summary_written = False
 
+    # P3 模型匹配（opt-in）：只对 dispatched 工作会话生效；
+    # classify/planner 会话不切换（校准谱系绑定 baidu/qianfan-code-latest）
+    model_map = {}
+    if args.use_model_map:
+        map_file = Path(__file__).resolve().parent / "model_map.json"
+        model_map = json.loads(map_file.read_text(encoding="utf-8")).get("mapping", {})
+        state["model_map"] = True
+
+    def dispatch_with_map(text: str, preset: str, timeout_s: int) -> dict:
+        return dispatch_single(text, preset, timeout_s,
+                               model=model_map.get(preset))
+
     if args.plan_only and label != "composite":
         state["decision"] = f"plan-only: 分类={label}，未执行"
     elif label in ROUTABLE:
-        print(f"[dispatch] → {label}", flush=True)
-        d = dispatch_single(args.need, label, args.timeout)
+        picked = model_map.get(label)
+        print(f"[dispatch] → {label}"
+              + (f"（model={picked['provider']}/{picked['model']}）" if picked else ""),
+              flush=True)
+        d = dispatch_with_map(args.need, label, args.timeout)
         state["dispatch"] = d
         state["decision"] = (f"routed:{label} status={d['status']}"
                              if d["status"] == "ok" else
@@ -242,7 +276,8 @@ def main() -> int:
         if d["status"] == "ok":
             (args.out / f"transcript_{task_id}.md").write_text(
                 f"# 调度结果 {task_id}\n\n- 需求: {args.need}\n- 路由: {label}\n"
-                f"- 会话: {d['sessionId']}\n\n## 回答\n\n{d['answer']}\n",
+                + (f"- 模型: {picked['provider']}/{picked['model']}\n" if picked else "")
+                + f"- 会话: {d['sessionId']}\n\n## 回答\n\n{d['answer']}\n",
                 encoding="utf-8")
     elif label == "composite":
         print("[planner] 拆分中（minimal 会话单调用）…", flush=True)
@@ -270,7 +305,7 @@ def main() -> int:
                                          f"预估调用 ≈ {n + 2}（分类+规划+子任务），未执行")
                 else:
                     state["state_path"] = str((args.out / "state.json").resolve())
-                    execute_plan(state, dispatch_single, args.timeout, args.out)
+                    execute_plan(state, dispatch_with_map, args.timeout, args.out)
                     agg = aggregate(state, args.out)
                     summary_written = True
                     counts = {}
