@@ -24,9 +24,75 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from classify_run import (BASE, CWD, LABELS, PROMPT_VERSION,  # noqa: E402
                           all_events, classify_one, rpc)
+from plan_executor import (PLANNER_PROMPT, aggregate, execute_plan,  # noqa: E402
+                           extract_plan_json, verify_plan)
 
 ROUTABLE = ["research-collab", "qa-gate", "daily-assistant", "standard"]
 REGISTRY = Path(__file__).resolve().parent / "sched_sessions.json"
+
+
+def _prompt_turn(text: str, preset: str, timeout_s: int, title: str) -> tuple:
+    """通用单回合：开会话→提示→等 turn/end→取文本。返回 (answer, session_id, status)。"""
+    backoffs = [30, 60, 120, 240, 480]
+    quota = ("429", "rate limit", "rate_limit", "quota", "token_plan")
+    try:
+        sid = rpc("session.create", {"agentPreset": preset, "cwd": CWD})["sessionId"]
+        try:
+            rpc("session.rename", {"sessionId": sid, "title": title})
+        except Exception:  # noqa: BLE001
+            pass
+        for attempt in range(len(backoffs) + 1):
+            events_before = all_events(sid)
+            before_turns = sum(1 for e in events_before if e.get("type") == "turn/end")
+            before_user = max((e.get("seq", -1) for e in events_before
+                               if e.get("type") == "user/message"), default=-1)
+            rpc("session.prompt", {"sessionId": sid, "mode": "queue",
+                                   "content": [{"type": "text", "text": text}]})
+            user_seq = before_user
+            u_deadline = time.time() + 60
+            while time.time() < u_deadline:
+                user_seq = max((e.get("seq", -1) for e in all_events(sid)
+                                if e.get("type") == "user/message"), default=before_user)
+                if user_seq > before_user:
+                    break
+                time.sleep(2)
+            deadline = time.time() + timeout_s
+            turn_end = None
+            while time.time() < deadline:
+                events = all_events(sid)
+                ends = [e for e in events if e.get("type") == "turn/end"]
+                if len(ends) >= before_turns + 1:
+                    turn_end = ends[-1]
+                    break
+                time.sleep(5)
+            if turn_end is None:
+                return "", sid, "timeout"
+            reason = ((turn_end.get("data") or {}).get("reason") or {})
+            if reason.get("kind") == "error":
+                msg = str((reason.get("error") or {}).get("message", ""))
+                if any(m in msg.lower() for m in quota) and attempt < len(backoffs):
+                    print(f"  [retry {attempt + 1}] quota 429，退避 {backoffs[attempt]}s",
+                          flush=True)
+                    time.sleep(backoffs[attempt])
+                    continue
+                return "", sid, f"turn-error: {msg[:120]}"
+            texts = []
+            for ev in all_events(sid):
+                if ev.get("type") == "assistant/message" and ev.get("seq", 0) > user_seq:
+                    m = (ev.get("data") or {}).get("message") or {}
+                    for block in m.get("content") or []:
+                        if isinstance(block, dict) and block.get("type") == "text":
+                            texts.append(block.get("text", ""))
+            return "\n".join(texts), sid, "ok"
+        return "", sid, "retries-exhausted"
+    except Exception as e:  # noqa: BLE001
+        return "", "", f"error: {e}"
+
+
+def run_planner(need: str, timeout_s: int) -> tuple:
+    """规划器：单调用产出子任务 DAG JSON。"""
+    text = PLANNER_PROMPT.replace("{need}", need)
+    return _prompt_turn(text, "minimal", timeout_s, "sched-plan")
 
 
 def register_session(purpose: str, preset: str, session_id: str, need: str) -> None:
@@ -115,12 +181,35 @@ def dispatch_single(need: str, preset: str, timeout_s: int) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("need", help="用户需求文本")
+    ap.add_argument("need", nargs="?", default=None, help="用户需求文本")
     ap.add_argument("--plan-only", action="store_true",
-                    help="只分类出计划，不执行投递（成本预估）")
+                    help="只出分类/拆分计划与预算预估，不执行投递")
+    ap.add_argument("--resume", type=Path, default=None, metavar="STATE_JSON",
+                    help="断点续跑：从 state.json 恢复，跳过 ok，重跑 pending/fail")
     ap.add_argument("--timeout", type=int, default=600)
     ap.add_argument("--out", type=Path, default=Path("sched_out"))
     args = ap.parse_args()
+
+    # --resume：从检查点恢复（跳过分类与规划，直接续跑未完成子任务）
+    if args.resume is not None:
+        state = json.loads(args.resume.read_text(encoding="utf-8"))
+        if "plan" not in state or "subtasks" not in state:
+            print("[resume] state.json 无 plan/subtasks，无法续跑")
+            return 1
+        out_dir = args.resume.parent
+        state["state_path"] = str(args.resume.resolve())
+        before = {k: v["status"] for k, v in state["subtasks"].items()}
+        execute_plan(state, dispatch_single, args.timeout, out_dir)
+        agg = aggregate(state, out_dir)
+        args.resume.write_text(json.dumps(state, ensure_ascii=False, indent=2),
+                               encoding="utf-8")
+        changed = {k: f"{before[k]}->{state['subtasks'][k]['status']}"
+                   for k in before if before[k] != state["subtasks"][k]["status"]}
+        print(f"[resume] 重跑结果: {changed or '无变化（其余均 ok/awaiting-user/skip）'}")
+        print(f"汇总: {agg}")
+        return 0
+    if not args.need:
+        ap.error("need 必填（或用 --resume）")
 
     args.out.mkdir(parents=True, exist_ok=True)
     task_id = f"t{int(time.time())}"
@@ -139,8 +228,9 @@ def main() -> int:
         "plan_only": args.plan_only,
         "dispatch": None, "decision": None,
     }
+    summary_written = False
 
-    if args.plan_only:
+    if args.plan_only and label != "composite":
         state["decision"] = f"plan-only: 分类={label}，未执行"
     elif label in ROUTABLE:
         print(f"[dispatch] → {label}", flush=True)
@@ -155,8 +245,38 @@ def main() -> int:
                 f"- 会话: {d['sessionId']}\n\n## 回答\n\n{d['answer']}\n",
                 encoding="utf-8")
     elif label == "composite":
-        state["decision"] = ("escalate: composite——需求含多领域子任务，"
-                             "拆分/并行/汇总为 P2 能力，P1 不执行；请拆分后分别提交或等 P2")
+        print("[planner] 拆分中（minimal 会话单调用）…", flush=True)
+        raw, plan_sid, plan_status = run_planner(args.need, args.timeout)
+        if plan_sid:
+            register_session("planner", "minimal", plan_sid, args.need)
+        state["planner"] = {"session": plan_sid, "status": plan_status}
+        plan = extract_plan_json(raw) if plan_status == "ok" else None
+        if plan is None:
+            state["decision"] = (f"escalate: 规划器无有效输出（{plan_status}），"
+                                 "不猜——请重新提交或手动拆分")
+        else:
+            errors, cleaned = verify_plan(plan)
+            if errors:
+                state["decision"] = "escalate: 拆分计划校验失败——" + "；".join(errors[:5])
+                state["planner"]["raw"] = raw[:2000]
+            else:
+                state["plan"] = cleaned
+                state["subtasks"] = {s["id"]: {"status": "pending", "answer": "",
+                                                "sessionId": ""}
+                                     for s in cleaned["subtasks"]}
+                n = len(cleaned["subtasks"])
+                if args.plan_only:
+                    state["decision"] = (f"plan-only: 拆分为 {n} 个子任务，"
+                                         f"预估调用 ≈ {n + 2}（分类+规划+子任务），未执行")
+                else:
+                    state["state_path"] = str((args.out / "state.json").resolve())
+                    execute_plan(state, dispatch_single, args.timeout, args.out)
+                    agg = aggregate(state, args.out)
+                    summary_written = True
+                    counts = {}
+                    for s in state["subtasks"].values():
+                        counts[s["status"]] = counts.get(s["status"], 0) + 1
+                    state["decision"] = f"plan-executed: {counts}（汇总见 {agg.name}）"
     elif label == "clarify":
         state["decision"] = ("escalate: clarify——需求信息不足或指代不明，"
                              "请补充：对象是哪个？要做什么？标准是什么？（路由表纪律：不猜）")
@@ -181,7 +301,8 @@ def main() -> int:
               "- 路由由校准过的 classify-judge 给出（构造即真值 gold 校准）；",
               "  分类歧义/失败一律升级用户，不猜。",
               "- 登记会话见 sched_sessions.json（git 追踪，不自动删除）。"]
-    (args.out / "summary.md").write_text("\n".join(lines), encoding="utf-8")
+    if not summary_written:  # composite 已执行时 aggregate() 已写过完整汇总
+        (args.out / "summary.md").write_text("\n".join(lines), encoding="utf-8")
     print(f"[done] {state['decision']}")
     print(f"汇总: {args.out / 'summary.md'}")
     return 0

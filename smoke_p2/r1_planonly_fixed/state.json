@@ -1,0 +1,47 @@
+{
+  "task_id": "t1787023732",
+  "need": "先写一个生成 10 个随机整数的 Python 函数，再起草一份会议纪要模板。",
+  "classify": {
+    "pred": "composite",
+    "parse_fail": false,
+    "prompt_version": "v1-classify",
+    "classify_session": "session-aadc6785-a90a-46e2-9c0c-ab466f28990c"
+  },
+  "plan_only": true,
+  "dispatch": null,
+  "decision": "plan-only: 拆分为 2 个子任务，预估调用 ≈ 4（分类+规划+子任务），未执行",
+  "planner": {
+    "session": "session-ec96508d-fc65-4312-b176-09fb53f58fe2",
+    "status": "ok"
+  },
+  "plan": {
+    "subtasks": [
+      {
+        "id": "s1",
+        "text": "写一个生成 10 个随机整数的 Python 函数",
+        "preset": "standard",
+        "depends_on": [],
+        "protection": false
+      },
+      {
+        "id": "s2",
+        "text": "起草一份会议纪要模板",
+        "preset": "daily-assistant",
+        "depends_on": [],
+        "protection": false
+      }
+    ]
+  },
+  "subtasks": {
+    "s1": {
+      "status": "pending",
+      "answer": "",
+      "sessionId": ""
+    },
+    "s2": {
+      "status": "pending",
+      "answer": "",
+      "sessionId": ""
+    }
+  }
+}

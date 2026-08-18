@@ -1,0 +1,13 @@
+{
+  "task_id": "t1787023244",
+  "need": "先写一个生成 10 个随机整数的 Python 函数，再起草一份会议纪要模板。",
+  "classify": {
+    "pred": "composite",
+    "parse_fail": false,
+    "prompt_version": "v1-classify",
+    "classify_session": "session-3ef4aa67-17b8-47c2-b4b1-01924c659ac8"
+  },
+  "plan_only": true,
+  "dispatch": null,
+  "decision": "plan-only: 分类=composite，未执行"
+}
