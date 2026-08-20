@@ -103,7 +103,8 @@ def parse_label(text: str) -> str | None:
     return found[0] if len(found) == 1 else None
 
 
-def classify_one(item: dict, preset: str, timeout_s: int, tag: str) -> dict:
+def classify_one(item: dict, preset: str, timeout_s: int, tag: str,
+                 provider: str = "ali", model: str = "deepseek-v4-flash-0731") -> dict:
     rec = {"sample_id": item["sample_id"], "gold": item["gold"],
            "pred": None, "raw": "", "parse_fail": False,
            "status": "ok", "retries": 0, "sessionId": ""}
@@ -116,9 +117,8 @@ def classify_one(item: dict, preset: str, timeout_s: int, tag: str) -> dict:
                                    "title": f"{tag} {item['sample_id']}"})
         except Exception:  # noqa: BLE001
             pass
-        # 切到 china/Qwen3.8-Max（脱离 baidu RPM 限制）
         rpc("session.selectModel", {"sessionId": sid,
-                                    "provider": "china", "model": "Qwen3.8-Max"})
+                                    "provider": provider, "model": model})
         for attempt in range(len(BACKOFFS) + 1):
             events_before = all_events(sid)
             before_turns = sum(1 for e in events_before if e.get("type") == "turn/end")
@@ -183,6 +183,8 @@ def main() -> int:
     ap.add_argument("--tag", default="cls-calib")
     ap.add_argument("--timeout", type=int, default=300)
     ap.add_argument("--pace", type=float, default=5.0)
+    ap.add_argument("--provider", default="ali")
+    ap.add_argument("--model", default="deepseek-v4-flash-0731")
     args = ap.parse_args()
 
     gold = json.loads(args.gold.read_text(encoding="utf-8"))
@@ -196,7 +198,8 @@ def main() -> int:
     for i, item in enumerate(items):
         print(f"[classify {i + 1}/{len(items)}] {item['sample_id']} "
               f"(gold={item['gold']})", flush=True)
-        rec = classify_one(item, args.preset, args.timeout, args.tag)
+        rec = classify_one(item, args.preset, args.timeout, args.tag,
+                           provider=args.provider, model=args.model)
         verdicts.append(rec)
         print(f"  -> pred={rec['pred']} parse_fail={rec['parse_fail']} "
               f"status={rec['status']}", flush=True)
