@@ -4,3 +4,5 @@
 # 运行产物（可再生）
 runs/
 *.tmp
+
+sched_out/
