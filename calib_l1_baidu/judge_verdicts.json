@@ -1,0 +1,325 @@
+{
+  "prompt_version": "v1-classify",
+  "verdicts": [
+    {
+      "sample_id": "c01",
+      "gold": "research-collab",
+      "pred": "research-collab",
+      "raw": "research-collab",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-97ef9f9a-c5a8-4a20-b5de-55d116783c79"
+    },
+    {
+      "sample_id": "c02",
+      "gold": "research-collab",
+      "pred": "research-collab",
+      "raw": "research-collab",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-c1e1e859-4936-49fd-ae54-dca923b1f9a4"
+    },
+    {
+      "sample_id": "c03",
+      "gold": "research-collab",
+      "pred": "research-collab",
+      "raw": "research-collab",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-218c4b42-6119-4bb8-a2f9-03433d3eafbf"
+    },
+    {
+      "sample_id": "c04",
+      "gold": "qa-gate",
+      "pred": "qa-gate",
+      "raw": "qa-gate",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-20b48f9f-e37f-4009-a52b-5b4f50664f70"
+    },
+    {
+      "sample_id": "c05",
+      "gold": "qa-gate",
+      "pred": "qa-gate",
+      "raw": "qa-gate",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-c90d0d98-4d67-4a8d-bf7d-f42020cf8dbd"
+    },
+    {
+      "sample_id": "c06",
+      "gold": "qa-gate",
+      "pred": "qa-gate",
+      "raw": "qa-gate",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-f3ecc00d-830c-4dd4-a313-daccbbbf3445"
+    },
+    {
+      "sample_id": "c07",
+      "gold": "daily-assistant",
+      "pred": "daily-assistant",
+      "raw": "daily-assistant",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-4680a779-19e8-4b4d-9406-2017978677ba"
+    },
+    {
+      "sample_id": "c08",
+      "gold": "daily-assistant",
+      "pred": "daily-assistant",
+      "raw": "daily-assistant",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-d200be07-9d21-4ebc-b828-7653672c8edd"
+    },
+    {
+      "sample_id": "c09",
+      "gold": "daily-assistant",
+      "pred": "daily-assistant",
+      "raw": "daily-assistant",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-45fec333-eb97-414f-8c7f-25f6a45598be"
+    },
+    {
+      "sample_id": "c10",
+      "gold": "standard",
+      "pred": "standard",
+      "raw": "standard",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-764cbd0c-3fd5-4e9e-8b1d-c6529f05dafb"
+    },
+    {
+      "sample_id": "c11",
+      "gold": "standard",
+      "pred": "standard",
+      "raw": "standard",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-18b98096-cb66-4ea0-88a8-058d6e916cf8"
+    },
+    {
+      "sample_id": "c12",
+      "gold": "standard",
+      "pred": "standard",
+      "raw": "standard",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-a3964eda-081b-45ab-a976-b385a6bc1cda"
+    },
+    {
+      "sample_id": "c13",
+      "gold": "composite",
+      "pred": "composite",
+      "raw": "composite",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-fabba055-1e14-4b42-b758-52328d91ab47"
+    },
+    {
+      "sample_id": "c14",
+      "gold": "composite",
+      "pred": "composite",
+      "raw": "composite",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-ac534757-c558-404e-8cfb-96053554675b"
+    },
+    {
+      "sample_id": "c15",
+      "gold": "composite",
+      "pred": "composite",
+      "raw": "composite",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-b1316de7-df84-4ba4-a634-e5341974b042"
+    },
+    {
+      "sample_id": "c16",
+      "gold": "composite",
+      "pred": "composite",
+      "raw": "composite",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-a568a685-d9c0-4487-8a20-568e1601564b"
+    },
+    {
+      "sample_id": "c17",
+      "gold": "composite",
+      "pred": "composite",
+      "raw": "composite",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-67a61bc1-186f-4927-9f0a-5e207fb2fe97"
+    },
+    {
+      "sample_id": "c18",
+      "gold": "composite",
+      "pred": "composite",
+      "raw": "composite",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-81ce8edd-8eb1-4cf1-88a2-d5c262390823"
+    },
+    {
+      "sample_id": "c19",
+      "gold": "clarify",
+      "pred": "clarify",
+      "raw": "clarify",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-237efd5a-3134-4146-85b6-02945f901291"
+    },
+    {
+      "sample_id": "c20",
+      "gold": "clarify",
+      "pred": "research-collab",
+      "raw": "research-collab",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-572f7684-ad63-4a0c-8545-b4cb0f1d8168"
+    },
+    {
+      "sample_id": "c21",
+      "gold": "clarify",
+      "pred": "clarify",
+      "raw": "clarify",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-85c8b231-d627-4484-8a6f-1135729f92a0"
+    },
+    {
+      "sample_id": "c22",
+      "gold": "clarify",
+      "pred": "clarify",
+      "raw": "clarify",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-28295196-ab08-405f-b069-a21ce93ea623"
+    },
+    {
+      "sample_id": "c23",
+      "gold": "clarify",
+      "pred": "clarify",
+      "raw": "clarify",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-2d83e9f8-45f4-4aad-b778-b773d2929a97"
+    },
+    {
+      "sample_id": "c24",
+      "gold": "clarify",
+      "pred": "clarify",
+      "raw": "clarify",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-7dceba52-3630-4114-945d-3458adc7284b"
+    },
+    {
+      "sample_id": "c25",
+      "gold": "research-collab",
+      "pred": "research-collab",
+      "raw": "research-collab",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-6216e9c5-c853-4e3b-ad85-1ff899881b64"
+    },
+    {
+      "sample_id": "c26",
+      "gold": "research-collab",
+      "pred": "research-collab",
+      "raw": "research-collab",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-03895ceb-c81b-4d32-a5fa-cabb005fab64"
+    },
+    {
+      "sample_id": "c27",
+      "gold": "qa-gate",
+      "pred": "research-collab",
+      "raw": "research-collab",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-110c1cd1-23a2-4273-b4cd-9861462ef2a0"
+    },
+    {
+      "sample_id": "c28",
+      "gold": "qa-gate",
+      "pred": "qa-gate",
+      "raw": "qa-gate",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-5ff98eb1-a790-4ad5-8fc1-18b2f2bff6aa"
+    },
+    {
+      "sample_id": "c29",
+      "gold": "daily-assistant",
+      "pred": "daily-assistant",
+      "raw": "daily-assistant",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-0fe4e654-92ed-4c8d-8c4d-55eb9929b64a"
+    },
+    {
+      "sample_id": "c30",
+      "gold": "daily-assistant",
+      "pred": "daily-assistant",
+      "raw": "daily-assistant",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-8eccf68c-6931-45d0-b354-e85fa3c17f4c"
+    },
+    {
+      "sample_id": "c31",
+      "gold": "standard",
+      "pred": "research-collab",
+      "raw": "research-collab",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-0ef4426d-d490-4d19-af23-fc2019b8230d"
+    },
+    {
+      "sample_id": "c32",
+      "gold": "standard",
+      "pred": "clarify",
+      "raw": "clarify",
+      "parse_fail": false,
+      "status": "ok",
+      "retries": 0,
+      "sessionId": "session-2c9e7854-3980-4f33-b3df-b3ade8e3ee99"
+    }
+  ]
+}

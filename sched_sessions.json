@@ -286,5 +286,77 @@
     "sessionId": "session-dbc0722c-4fe0-484c-9038-46b54e409710",
     "need": "写一个 Python 函数 is_prime(n)，判断 n 是否为素数，并附两个测试断言（assert）。要求：函数正确处理边界情况（n<2 返回 False），使用试除法即可；两个测试断言一个覆盖素数、一个覆盖非素数或边界。交付代码文件。",
     "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-20T13:01:36.686726+00:00",
+    "purpose": "dispatch",
+    "preset": "standard",
+    "sessionId": "session-a6ffb6a4-4745-4715-a500-f946394cef61",
+    "need": "写一个 Python 函数判断素数。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-21T09:00:00.216291+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-e6c46b1a-7c76-45c8-9e56-47842bcd4703",
+    "need": "派给 qa-gate 评测门：对 F:\\agent to AGI\\agi-research-kit\\papers\\preprint_unified_en.md 做 TMLR G1-G11 + 7角色对抗复审（证据：ANALYSIS.json 3结论 qwen2.5 underpowered/qwen3 equivalent p=0.677/qwen3 B bare 311/448 vs full ",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-21T09:15:58.773568+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-ed64ef6d-93f5-4ee6-b095-355e9e1abb24",
+    "need": "请派给 qa-gate：验证 F:\\agent to AGI\\agi-research-kit\\papers\\preprint_unified_en.md 的 TMLR 合规与数据一致性。输入：ANALYSIS.json，preflight，scan，manifest。具体验证：1) G1-G11 2) 7角色对抗 3) 数字可复算。请用 qa-gate preset。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-25T12:48:42.673566+00:00",
+    "purpose": "dispatch",
+    "preset": "standard",
+    "sessionId": "session-859c3c82-2282-454f-bd61-f530fe2b07dc",
+    "need": "写一个 Python 函数判断素数。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-25T12:49:17.805671+00:00",
+    "purpose": "dispatch",
+    "preset": "daily-assistant",
+    "sessionId": "session-0c08e9d6-fdb3-4704-836a-e5fcdbdbdb10",
+    "need": "帮我把这个文件夹的照片按日期重命名。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-25T13:00:39.332581+00:00",
+    "purpose": "dispatch",
+    "preset": "standard",
+    "sessionId": "session-8c521c94-f62c-4867-9f6e-51cb07b21ae2",
+    "need": "写一个 Python 函数判断素数。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-25T13:01:15.910578+00:00",
+    "purpose": "dispatch",
+    "preset": "daily-assistant",
+    "sessionId": "session-7fe560ce-b1ad-481c-8835-945f6e4d4e8a",
+    "need": "帮我把这个文件夹的照片按日期重命名。",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-28T04:01:46.796073+00:00",
+    "purpose": "classify",
+    "preset": "minimal",
+    "sessionId": "session-d3702f7e-1550-41b2-8bf8-ae939621acc0",
+    "need": "TMLR 评分：When to Use Which: Function Calling vs Code Mode Under Equal Budget，证据在 F:\\deepseek\\papers\\codeact-vs-fc",
+    "policy": "no-auto-delete（清理须用户裁决）"
+  },
+  {
+    "ts": "2026-08-28T04:01:46.898331+00:00",
+    "purpose": "dispatch",
+    "preset": "qa-gate",
+    "sessionId": "session-80277ce6-e636-4255-891e-f76a39d2a7e5",
+    "need": "TMLR 评分：When to Use Which: Function Calling vs Code Mode Under Equal Budget，证据在 F:\\deepseek\\papers\\codeact-vs-fc",
+    "policy": "no-auto-delete（清理须用户裁决）"
   }
 ]

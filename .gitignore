@@ -1,2 +1,6 @@
 ﻿__pycache__/
 *.pyc
+
+# 运行产物（可再生）
+runs/
+*.tmp
