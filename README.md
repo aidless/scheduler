@@ -40,6 +40,10 @@ python validate_coding_r4_tests.py  # same, for the 16-task fleet-r4 set
 python sched_sessions.py stats      # inspect the session ledger
 ```
 
+**Verified offline (this tree, 2026-11-01):** `test_plan_executor.py` → 13 checks ALL PASS;
+`ask.py --check-routes` → 7 presets / 46 keywords, no ambiguity; both
+`validate_coding_*.py` → ALL_TESTS_VALID. All exit 0, no third-party imports.
+
 Full pipeline (requires the agent host):
 
 ```bash
