@@ -1,5 +1,7 @@
 # scheduler
 
+[![CI](https://github.com/aidless/scheduler/actions/workflows/static-checks.yml/badge.svg)](https://github.com/aidless/scheduler/actions/workflows/static-checks.yml)
+
 A single-entry dispatcher for a fleet of local AI agent sessions: it takes an arbitrary natural-language request, classifies it with a calibrated judge, routes it to the right specialist agent preset (or plans it as a subtask DAG), executes, and returns one aggregated report.
 
 > **Research prototype.** This was extracted from a personal research workspace and drives a specific local agent host (JSON-RPC over HTTP at `http://127.0.0.1:3080/api`) — it is not a general-purpose library. See [Quick start](#quick-start) for what must be configured before reusing it.
