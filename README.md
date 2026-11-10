@@ -18,6 +18,20 @@ The pipeline:
 4. **Escalate, don't guess** — `clarify` labels, unparseable plans, and failed classifications escalate to the user instead of being routed somewhere plausible. Escalation is reported as exit code 0 with an explicit decision.
 5. **Summarize** — every run writes `state.json`, `summary.md`, and per-task `transcript_*.md` under `runs/<timestamp>/`.
 
+The same pipeline as a diagram, mapped to the real modules:
+
+```mermaid
+flowchart LR
+    REQ["ask.py<br/>one natural-language request"] --> CLS["dispatcher.py · classify<br/>calibrated LLM judge, 6 classes<br/>research-collab / qa-gate /<br/>daily-assistant / standard /<br/>composite / clarify"]
+    CLS -->|"single-domain"| RT["route<br/>agent preset session + model_map"]
+    CLS -->|"composite"| PLN["plan_executor.py<br/>DAG proposal → deterministic validation<br/>(whitelisted presets, unique ids,<br/>acyclic, protection keywords)"]
+    PLN -->|"protected step"| ESC["awaiting-user<br/>never auto-executed"]
+    PLN -->|"validated"| EXE["topological execution<br/>checkpoint state.json each step<br/>upstream results → downstream prompts<br/>--resume skips completed work"]
+    RT --> SUM
+    EXE --> SUM["summarize<br/>runs/&lt;ts&gt;/: state.json,<br/>summary.md, transcript_*.md"]
+    CLS -->|"clarify / unparseable /<br/>failed classification"| ESC2["escalate to user<br/>(exit 0, explicit decision)"]
+```
+
 Design discipline visible in the code:
 
 - **Deterministic guardrails over LLM output** — plan validation and protection keywords do not rely on the model's compliance.
