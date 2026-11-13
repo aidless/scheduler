@@ -1,5 +1,7 @@
 # scheduler
 
+[![CI](https://github.com/aidless/scheduler/actions/workflows/static-checks.yml/badge.svg)](https://github.com/aidless/scheduler/actions/workflows/static-checks.yml)
+
 A single-entry dispatcher for a fleet of local AI agent sessions: it takes an arbitrary natural-language request, classifies it with a calibrated judge, routes it to the right specialist agent preset (or plans it as a subtask DAG), executes, and returns one aggregated report.
 
 > **Research prototype.** This was extracted from a personal research workspace and drives a specific local agent host (JSON-RPC over HTTP at `http://127.0.0.1:3080/api`) — it is not a general-purpose library. See [Quick start](#quick-start) for what must be configured before reusing it.
@@ -15,6 +17,20 @@ The pipeline:
 3. **Plan and execute** — composite requests go through an LLM planner that proposes a subtask DAG (`plan_executor.py`). The plan is validated deterministically: presets must be whitelisted, ids unique, the graph acyclic, and protection keywords (delete/publish/pay/…) force `protection=true`. Protected subtasks are never auto-executed — they return `awaiting-user`. Execution is topological with checkpointing: each finished subtask updates `state.json`, upstream results are injected into downstream prompts, and `--resume` skips completed work.
 4. **Escalate, don't guess** — `clarify` labels, unparseable plans, and failed classifications escalate to the user instead of being routed somewhere plausible. Escalation is reported as exit code 0 with an explicit decision.
 5. **Summarize** — every run writes `state.json`, `summary.md`, and per-task `transcript_*.md` under `runs/<timestamp>/`.
+
+The same pipeline as a diagram, mapped to the real modules:
+
+```mermaid
+flowchart LR
+    REQ["ask.py<br/>one natural-language request"] --> CLS["dispatcher.py · classify<br/>calibrated LLM judge, 6 classes<br/>research-collab / qa-gate /<br/>daily-assistant / standard /<br/>composite / clarify"]
+    CLS -->|"single-domain"| RT["route<br/>agent preset session + model_map"]
+    CLS -->|"composite"| PLN["plan_executor.py<br/>DAG proposal → deterministic validation<br/>(whitelisted presets, unique ids,<br/>acyclic, protection keywords)"]
+    PLN -->|"protected step"| ESC["awaiting-user<br/>never auto-executed"]
+    PLN -->|"validated"| EXE["topological execution<br/>checkpoint state.json each step<br/>upstream results → downstream prompts<br/>--resume skips completed work"]
+    RT --> SUM
+    EXE --> SUM["summarize<br/>runs/&lt;ts&gt;/: state.json,<br/>summary.md, transcript_*.md"]
+    CLS -->|"clarify / unparseable /<br/>failed classification"| ESC2["escalate to user<br/>(exit 0, explicit decision)"]
+```
 
 Design discipline visible in the code:
 
