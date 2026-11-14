@@ -132,3 +132,7 @@ smoke_p3/                 Smoke test for model mapping
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+## 本机可重跑性
+
+`make eval` 只跑离线纯逻辑测试 `python3 test_plan_executor.py`（ALL PASS，无模型调用）；原入口 `probe_models.py` 需要 `127.0.0.1:3080/api` 的活体 agent host，本机无凭据时服务端回 `unauthorized`，故保留为 `make ci-eval`。
