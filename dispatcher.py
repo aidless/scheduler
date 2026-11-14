@@ -22,7 +22,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from classify_run import (BASE, CWD, LABELS, PROMPT_VERSION,  # noqa: E402
+from classify_run import (CWD, PROMPT_VERSION,  # noqa: E402
                           all_events, classify_one, rpc)
 from plan_executor import (PLANNER_PROMPT, aggregate, execute_plan,  # noqa: E402
                            extract_plan_json, verify_plan)
@@ -198,7 +198,7 @@ def dispatch_single(need: str, preset: str, timeout_s: int,
                 rec["status"] = f"error: {e}"
                 return rec
         else:
-            rec["answer"] = f"未找到 PDF 路径，请在需求中给出完整 .pdf 路径，例如：用 paperreview-agent 审 F:\\xxx\\main.pdf"
+            rec["answer"] = "未找到 PDF 路径，请在需求中给出完整 .pdf 路径，例如：用 paperreview-agent 审 F:\\xxx\\main.pdf"
             rec["status"] = "ok"
             return rec
     backoffs = [30, 60, 120, 240, 480]
