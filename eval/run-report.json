@@ -1,0 +1,129 @@
+{
+ "total": 20,
+ "passed": 20,
+ "failed": 0,
+ "selftest": false,
+ "failed_by_axis": {},
+ "results": [
+  {
+   "id": "pv-01",
+   "axis": "plan-validation",
+   "ok": true,
+   "detail": "True"
+  },
+  {
+   "id": "pv-02",
+   "axis": "plan-validation",
+   "ok": true,
+   "detail": "True"
+  },
+  {
+   "id": "pv-03",
+   "axis": "plan-validation",
+   "ok": true,
+   "detail": "True"
+  },
+  {
+   "id": "pp-01",
+   "axis": "plan-parse",
+   "ok": true,
+   "detail": "2"
+  },
+  {
+   "id": "pp-02",
+   "axis": "plan-parse",
+   "ok": true,
+   "detail": "raised TypeError"
+  },
+  {
+   "id": "dt-01",
+   "axis": "dag-topo",
+   "ok": true,
+   "detail": "[['s1'], ['s2'], ['s3']]"
+  },
+  {
+   "id": "dt-02",
+   "axis": "dag-topo",
+   "ok": true,
+   "detail": "DAG 存在环（拓扑序覆盖不全）"
+  },
+  {
+   "id": "dt-03",
+   "axis": "dag-topo",
+   "ok": true,
+   "detail": "[['s1'], ['s2', 's3'], ['s4']]"
+  },
+  {
+   "id": "ex-01",
+   "axis": "execution",
+   "ok": true,
+   "detail": "True"
+  },
+  {
+   "id": "ex-02",
+   "axis": "execution",
+   "ok": true,
+   "detail": "True"
+  },
+  {
+   "id": "ex-03",
+   "axis": "execution",
+   "ok": true,
+   "detail": "上游未全部 ok: s1=fail"
+  },
+  {
+   "id": "ag-01",
+   "axis": "aggregation",
+   "ok": true,
+   "detail": "3"
+  },
+  {
+   "id": "ag-02",
+   "axis": "aggregation",
+   "ok": true,
+   "detail": "True"
+  },
+  {
+   "id": "ag-03",
+   "axis": "aggregation",
+   "ok": true,
+   "detail": "True"
+  },
+  {
+   "id": "rt-01",
+   "axis": "routing",
+   "ok": true,
+   "detail": "7"
+  },
+  {
+   "id": "rt-02",
+   "axis": "routing",
+   "ok": true,
+   "detail": "(46, 1)"
+  },
+  {
+   "id": "lg-01",
+   "axis": "ledger",
+   "ok": true,
+   "detail": "45"
+  },
+  {
+   "id": "lg-02",
+   "axis": "ledger",
+   "ok": true,
+   "detail": "(21, 21, 3)"
+  },
+  {
+   "id": "ca-01",
+   "axis": "calibration",
+   "ok": true,
+   "detail": "0.9583"
+  },
+  {
+   "id": "ca-02",
+   "axis": "calibration",
+   "ok": true,
+   "detail": "(32, 32, 32)"
+  }
+ ]
+}

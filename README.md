@@ -135,4 +135,42 @@ MIT — see [LICENSE](LICENSE).
 
 ## 本机可重跑性
 
-`make eval` 只跑离线纯逻辑测试 `python3 test_plan_executor.py`（ALL PASS，无模型调用）；原入口 `probe_models.py` 需要 `127.0.0.1:3080/api` 的活体 agent host，本机无凭据时服务端回 `unauthorized`，故保留为 `make ci-eval`。
+`make eval` 跑两套离线测试：验收题库 `python3 eval/run_cases.py`（20 条，必须 20/20）与纯逻辑测试 `python3 test_plan_executor.py`（ALL PASS），全程无模型调用；原入口 `probe_models.py` 需要 `127.0.0.1:3080/api` 的活体 agent host，本机无凭据时服务端回 `unauthorized`，故保留为 `make ci-eval`。
+
+## 验收标准与复算
+
+本仓判为合格的条件是 `python3 eval/run_cases.py` 通过率必须为 100%（20/20），且 `make eval` 退出码必须为 0；任何一条失败即判为不合格。
+
+题库 `eval/cases.jsonl` 的 20 条按 8 个 axis 分布，期望值全部由本仓 API 现算或直接从本仓数据文件解析（不是抄文档）：
+
+| axis | 条数 | 判什么 | 主要依据 |
+| --- | --- | --- | --- |
+| plan-validation | 3 | `verify_plan` 的合法计划 / 保护层关键词强制标记 / 非法 preset 拒绝 | `plan_executor.py` |
+| plan-parse | 2 | `extract_plan_json` 从说明文字中取计划；非字符串入参的异常语义 | `plan_executor.py` |
+| dag-topo | 3 | Kahn 分层的链 / 环 / 菱形三种形状 | `plan_executor.py` |
+| execution | 3 | 上游答案注入、保护层不投递、上游 fail → 下游 skip | `plan_executor.py` |
+| aggregation | 3 | `summary.md` 明细行数、待确认小节、失败与跳过小节 | `plan_executor.py` |
+| routing | 2 | `ROUTABLE` 7 个 preset、关键词 46 条且无跨 preset 二义 | `dispatcher.py` |
+| ledger | 2 | `sched_sessions.json` 45 条、按 purpose 计数 21/21/3 | `sched_sessions.json` |
+| calibration | 2 | `calib_classify_v1` 的 exact_match/n 复算、gold v2 的 n/items/counts 自洽 | `calib_classify_v1/stats.json`、`gold_classify_v2.json` |
+
+三条命令（全部离线，无模型调用）：
+
+```bash
+python3 eval/run_cases.py            # 20/20，退出码 0；任一失败退出码 1，题库自身损坏退出码 2
+python3 eval/run_cases.py --selftest # 篡改第 1 条期望值 → 必须变红（19/20），退出码 0 证明这套题不是装饰
+make eval                            # run_cases + test_plan_executor，两者任一失败则退出码非 0
+```
+
+复算说明：`python3 eval/run_cases.py --save` 会把本次逐条结果写到 `eval/run-report.json`（含 `total/passed/failed/failed_by_axis/results`），任何人可用同一命令重跑并逐条比对 `detail`。calibration 两条不是读备份数字，而是拿 `stats.json` 里的 `exact_match / n` 重算出 `exact_accuracy`，不一致时直接报 `MISMATCH`；ledger 与 routing 两条现数条目，README 里的 45 条 / 46 关键词可被独立复算。
+
+失败归因：`run_cases.py` 不只报通过率，失败时按 axis 汇总并逐条点名，例如
+
+```
+17/20 cases passed
+失败归因（按 axis）：
+  execution: 2 条 —— ex-01, ex-03
+  ledger: 1 条 —— lg-01
+```
+
+含义是「执行链路（上游注入 / 下游 skip）」与「账本条目数」两处口径变了，而不是笼统的「题库挂了」；改实现后按这个分桶先定位模块，再看 `eval/run-report.json` 里对应的 `detail`。
