@@ -1,0 +1,114 @@
+{
+  "acceptance_cases": 20,
+  "base_files": [
+    "classify_run.py",
+    "coding_model_ab.py",
+    "demo_tool_dispatch.py",
+    "probe_models.py",
+    "probe_preset_defaults.py",
+    "verify_select_model.py",
+    "verify_tool_plugin.py"
+  ],
+  "base_url": "http://127.0.0.1:3080/api",
+  "classify": [
+    {
+      "exact": 23,
+      "gold_file": "gold_classify_v1.json",
+      "judge": "baidu/qianfan-code-latest",
+      "misses": [
+        "c20"
+      ],
+      "n": 24,
+      "parse_fails": 0,
+      "prompt_version": "v1-classify",
+      "run": "calib_classify_v1"
+    },
+    {
+      "exact": 29,
+      "gold_file": "gold_classify_v2.json",
+      "judge": "baidu/qianfan-code-latest",
+      "misses": [
+        "c04",
+        "c20",
+        "c32"
+      ],
+      "n": 32,
+      "parse_fails": 0,
+      "prompt_version": "v1-classify",
+      "run": "calib_classify_v2gold"
+    },
+    {
+      "exact": 31,
+      "gold_file": "gold_classify_v2.json",
+      "judge": "china/Qwen3.8-Max",
+      "misses": [
+        "c01"
+      ],
+      "n": 32,
+      "parse_fails": 0,
+      "prompt_version": "v1-classify",
+      "run": "calib_classify_china"
+    },
+    {
+      "exact": 28,
+      "gold_file": "gold_classify_v2.json",
+      "judge": "not recorded",
+      "misses": [
+        "c20",
+        "c27",
+        "c31",
+        "c32"
+      ],
+      "n": 32,
+      "parse_fails": 0,
+      "prompt_version": "v1-classify",
+      "run": "calib_l1_baidu"
+    }
+  ],
+  "config_version": "G084-single05-20260821",
+  "cwd": "F:\\deepseek",
+  "fleet": [
+    {
+      "b_A_only": 0,
+      "c_B_only": 0,
+      "pass_A": 6,
+      "pass_B": 6,
+      "reexec_pass": 12,
+      "results_file": "coding_ab_results.json",
+      "results_plan_id": "model-map-v1",
+      "round": "fleet-r3",
+      "summary_note": "预注册 model-map-v1 决定规则；n=6 功效有限（见 power_declaration）",
+      "tasks": 6,
+      "tasks_file": "coding_ab_tasks.json",
+      "tasks_plan_id": "model-map-v1",
+      "work_dir": "ab_work"
+    },
+    {
+      "b_A_only": 0,
+      "c_B_only": 0,
+      "pass_A": 16,
+      "pass_B": 16,
+      "reexec_pass": 32,
+      "results_file": "coding_r4_results.json",
+      "results_plan_id": "model-map-v1",
+      "round": "fleet-r4",
+      "summary_note": "预注册 model-map-v1 决定规则；n=6 功效有限（见 power_declaration）",
+      "tasks": 16,
+      "tasks_file": "coding_r4_tasks.json",
+      "tasks_plan_id": "fleet-r4",
+      "work_dir": "ab_work_r4"
+    }
+  ],
+  "gold_v2_gold_set_field": "classify-judge v1",
+  "labels": [
+    "research-collab",
+    "qa-gate",
+    "daily-assistant",
+    "standard",
+    "composite",
+    "clarify"
+  ],
+  "mission_path": "F:\\deepseek\\.agent-memory\\agent-fleet-iter-2026",
+  "plan_executor_checks": 13,
+  "routing_threshold_literal": "0.5"
+}
