@@ -2,175 +2,64 @@
 
 [![CI](https://github.com/aidless/scheduler/actions/workflows/static-checks.yml/badge.svg)](https://github.com/aidless/scheduler/actions/workflows/static-checks.yml)
 
-A single-entry dispatcher for a fleet of local AI agent sessions: it takes an arbitrary natural-language request, classifies it with a calibrated judge, routes it to the right specialist agent preset (or plans it as a subtask DAG), executes, and returns one aggregated report.
+A local multi-agent workspace still needs a person to choose which specialist session handles each request.
+This repository is a research prototype of one front door: classify the request, route a single-domain request, or plan a composite one.
+It speaks JSON-RPC to one hardcoded local agent host and is not a general-purpose or production scheduler.
 
-> **Research prototype.** This was extracted from a personal research workspace and drives a specific local agent host (JSON-RPC over HTTP at `http://127.0.0.1:3080/api`) — it is not a general-purpose library. See [Quick start](#quick-start) for what must be configured before reusing it.
+<!-- NUMBERS:BEGIN -->
+**Result.** On the 4 committed classify-judge runs, in the table order below, exact label match is 23/24, 29/32, 31/32, and 28/32, with 0 parse failures in each run. Wilson 95% intervals (z=1.959963984540054) are 0.7976 to 0.9926, 0.7578 to 0.9676, 0.8426 to 0.9945, and 0.7193 to 0.9503. Gold labels are true by construction, not human agreement, and this check did not call the host at http://127.0.0.1:3080/api.
 
-## What it is
+The separate fleet-r4 coding comparison is a ceiling: both arms 16/16 and 16/16, 0 discordant pairs where only arm A passed and 0 where only arm B passed, so exact_mcnemar_p returns 1.0000. Each arm's Wilson 95% interval is 0.8064 to 1.0000. The earlier round was 6/6 versus 6/6 (Wilson 95% 0.6097 to 1.0000), not another 16/16.
 
-`scheduler` implements the "single front door" pattern for a multi-agent workspace: instead of choosing which agent session to open, the user issues one request to `ask.py` and the scheduler handles classification, routing, execution, and reporting.
+### Classify judge
 
-The pipeline:
+Exact match counts a stored pred only when it equals classify_run.parse_label of the raw reply and equals the gold-file label for that sample_id. Parse failures stay in the denominator. Every raw reply in these runs is exactly the predicted label. stats.json and pairs_escalation.csv match that recount. Where calibration.json and consistency.json exist, their escalation contingency matches the recount. Every verdict row has status ok and retries 0. Prompt on every verdict file is v1-classify. Labels are research-collab, qa-gate, daily-assistant, standard, composite, clarify. gold_classify_v2.json field gold_set is still "classify-judge v1". Both gold files set truth_source to a string that starts with "construction". Verdict rows do not record a provider or model. The judge column is calibration.json when that file exists, and "not recorded" when it does not.
 
-1. **Classify** — a prompt-frozen LLM judge labels the request as one of six classes: `research-collab`, `qa-gate`, `daily-assistant`, `standard` (single-domain), `composite` (multiple domains), or `clarify` (ambiguous). The judge is calibrated against gold sets that are true *by construction* (no human labeling); committed calibration runs report 0.875–0.97 exact accuracy with 0 parse failures (`calib_classify_*/stats.json`).
-2. **Route** — single-domain requests are dispatched to the matching agent preset session on the host (`research-collab`, `qa-gate`, `daily-assistant`, `standard`, plus keyword pre-routes for `paperreview-agent`, `kg-retrieval-agent`, `aigc-studio-agent`). Optional per-preset model mapping (`model_map.json`) is applied via the host's `selectModel`.
-3. **Plan and execute** — composite requests go through an LLM planner that proposes a subtask DAG (`plan_executor.py`). The plan is validated deterministically: presets must be whitelisted, ids unique, the graph acyclic, and protection keywords (delete/publish/pay/…) force `protection=true`. Protected subtasks are never auto-executed — they return `awaiting-user`. Execution is topological with checkpointing: each finished subtask updates `state.json`, upstream results are injected into downstream prompts, and `--resume` skips completed work.
-4. **Escalate, don't guess** — `clarify` labels, unparseable plans, and failed classifications escalate to the user instead of being routed somewhere plausible. Escalation is reported as exit code 0 with an explicit decision.
-5. **Summarize** — every run writes `state.json`, `summary.md`, and per-task `transcript_*.md` under `runs/<timestamp>/`.
+| run | gold file | judge in calibration.json | n | exact | parse_fails | Wilson 95% | misses |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| calib_classify_v1 | gold_classify_v1.json | baidu/qianfan-code-latest | 24 | 23 | 0 | 0.7976 to 0.9926 | c20 |
+| calib_classify_v2gold | gold_classify_v2.json | baidu/qianfan-code-latest | 32 | 29 | 0 | 0.7578 to 0.9676 | c04, c20, c32 |
+| calib_classify_china | gold_classify_v2.json | china/Qwen3.8-Max | 32 | 31 | 0 | 0.8426 to 0.9945 | c01 |
+| calib_l1_baidu | gold_classify_v2.json | not recorded | 32 | 28 | 0 | 0.7193 to 0.9503 | c20, c27, c31, c32 |
 
-The same pipeline as a diagram, mapped to the real modules:
+### Coding A/B
 
-```mermaid
-flowchart LR
-    REQ["ask.py<br/>one natural-language request"] --> CLS["dispatcher.py · classify<br/>calibrated LLM judge, 6 classes<br/>research-collab / qa-gate /<br/>daily-assistant / standard /<br/>composite / clarify"]
-    CLS -->|"single-domain"| RT["route<br/>agent preset session + model_map"]
-    CLS -->|"composite"| PLN["plan_executor.py<br/>DAG proposal → deterministic validation<br/>(whitelisted presets, unique ids,<br/>acyclic, protection keywords)"]
-    PLN -->|"protected step"| ESC["awaiting-user<br/>never auto-executed"]
-    PLN -->|"validated"| EXE["topological execution<br/>checkpoint state.json each step<br/>upstream results → downstream prompts<br/>--resume skips completed work"]
-    RT --> SUM
-    EXE --> SUM["summarize<br/>runs/&lt;ts&gt;/: state.json,<br/>summary.md, transcript_*.md"]
-    CLS -->|"clarify / unparseable /<br/>failed classification"| ESC2["escalate to user<br/>(exit 0, explicit decision)"]
-```
+Recomputed from the results rows and by executing each committed solution file. A pass is exit code 0 and stdout containing TESTS_OK. No model call. exact_mcnemar_p is the function in coding_model_ab.py; with no discordant pairs it returns 1.0000 by that function's definition. A ceiling is not evidence the arms are equivalent. In coding_model_ab.py, arm A is provider baidu model qianfan-code-latest, and arm B is None. Result rows do not store a model id. Preregistered arm text in analysis_plan_fleet_r4.json: A is baidu/qianfan-code-latest（代码专精，model_map v1 的映射目标）; B is china/Qwen3.8-Max（旗舰通用，standard preset 默认）.
 
-Design discipline visible in the code:
+| round | results file | tasks | arm A | arm B | A-only | B-only | McNemar p | Wilson 95% A | Wilson 95% B | re-exec |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| fleet-r3 | coding_ab_results.json | 6 | 6/6 | 6/6 | 0 | 0 | 1.0000 | 0.6097 to 1.0000 | 0.6097 to 1.0000 | 12/12 |
+| fleet-r4 | coding_r4_results.json | 16 | 16/16 | 16/16 | 0 | 0 | 1.0000 | 0.8064 to 1.0000 | 0.8064 to 1.0000 | 32/32 |
 
-- **Deterministic guardrails over LLM output** — plan validation and protection keywords do not rely on the model's compliance.
-- **Errors count in the denominator** — parse failures are scored as errors, not silently retried; 429/quota responses use a fixed backoff ladder (30/60/120/240/480 s).
-- **No silent deletion** — the session ledger `sched_sessions.json` is git-tracked under a no-auto-delete policy; `sched_sessions.py retire` requires `--confirm` and only marks the ledger (it never touches host sessions).
-- **Preregistered experiments** — calibration and A/B studies use frozen analysis plans (`analysis_plan_fleet_r4.json`, `model_map.json`), deterministic scoring (assert-and-run, no LLM judge), and exact McNemar tests. The committed `fleet_r4_report.md` documents a null result honestly: two coding A/B rounds both hit the ceiling (16/16 vs 16/16), so the model mapping stays opt-in with "no detectable difference" disclosed rather than claimed.
+coding_r4_results.json summary.note still contains "n=6" while the results rows cover 16 tasks. results plan_id is model-map-v1; the task file plan_id is fleet-r4. The counts above come from the rows and from re-execution, not from that note.
 
-## Quick start
+model_map.json keeps 4 of 4 preset mappings null.
 
-**Requirements:** Python 3.10+. Standard library only — the scripts import nothing outside `argparse`, `json`, `urllib`, `subprocess`, `re`, `time`, `pathlib`, etc. There is no `pip install` step.
+### Offline gate
 
-**Prerequisite (for anything that talks to models):** a local agent host exposing JSON-RPC over HTTP at `http://127.0.0.1:3080/api`, with agent presets named `research-collab`, `qa-gate`, `daily-assistant`, `standard`, and `minimal`. The endpoint and working directory are hardcoded constants at the top of each script (`BASE = "http://127.0.0.1:3080/api"`, `CWD = ...`) — edit them to point at your own host. Scripts that only run pure logic or self-validation need no host at all.
+eval/cases.jsonl has 20 cases and test_plan_executor.py reports 13 passing checks. BASE is http://127.0.0.1:3080/api in 7 scripts: classify_run.py, coding_model_ab.py, demo_tool_dispatch.py, probe_models.py, probe_preset_defaults.py, verify_select_model.py, verify_tool_plugin.py. CWD is F:\deepseek. classify_gold_gen.py MISSION is F:\deepseek\.agent-memory\agent-fleet-iter-2026, which is not in this repo. config.json version is G084-single05-20260821 and routing_threshold literal is 0.5. Every Python import in this repo resolves to the standard library or to a top-level module in this repository.
 
-Offline (no host, no model calls):
+Proposed GitHub About text: Research prototype that classifies requests for one local agent host (http://127.0.0.1:3080/api). Committed judge runs: exact match 23/24, 29/32, 31/32, and 28/32, with 0 parse failures. Gold is by construction, not human agreement. Not a general-purpose scheduler.
+<!-- NUMBERS:END -->
 
-```bash
-python test_plan_executor.py        # plan-executor logic tests (stubbed dispatch) → ALL PASS
-python ask.py --check-routes        # routing source-of-truth consistency check
-python ask.py --list-routes         # presets + keyword routes (also --format json|md)
-python validate_coding_tests.py     # self-validate coding A/B assertions (reference impls)
-python validate_coding_r4_tests.py  # same, for the 16-task fleet-r4 set
-python sched_sessions.py stats      # inspect the session ledger
-```
+## What the code does
 
-**Verified offline (this tree, 2026-11-01):** `test_plan_executor.py` → 13 checks ALL PASS;
-`ask.py --check-routes` → 7 presets / 46 keywords, no ambiguity; both
-`validate_coding_*.py` → ALL_TESTS_VALID. All exit 0, no third-party imports.
+`ask.py` is the front door. Classification, routing, and composite planning live in `dispatcher.py` and `plan_executor.py`. Presets that are not a single safe domain escalate instead of being guessed. Plan validation is deterministic: a preset whitelist, unique ids, an acyclic graph, and protection keywords. Protected steps stay unexecuted.
 
-Full pipeline (requires the agent host):
+Scripts that talk to models need the host named in the checked block. Edit the constants at the top of those scripts before pointing them at a different machine. Pure logic tests do not need the host.
 
-```bash
-python ask.py "Fix the login page error, then turn the meeting notes into a document"
-python ask.py "<request>" --plan-only           # show the plan and budget, don't execute
-python ask.py --resume runs/<ts>/state.json     # resume a run from its checkpoint
-python ask.py "<request>" --no-model-map        # disable per-preset model mapping
-```
+## Reproduce
 
-Artifacts land in `runs/<timestamp>/` (`state.json`, `summary.md`, `transcript_*.md`).
+`make check` recomputes the block above from committed files, reruns the offline acceptance cases (including the self-test that must go red), and reruns the plan-executor logic tests. It does not call a model, does not read API keys, and does not contact the agent host. `make eval` is the acceptance subset. `make ci-eval` is the live host probe and fails when that host is absent.
 
-Calibration and experiments (requires the agent host; gold sets and task files are committed):
+## Limits
 
-```bash
-python classify_run.py --gold gold_classify_v1.json --out calib_classify_v1   # classify-judge calibration
-python classify_run.py --gold gold_classify_v2.json --out calib_classify_v2gold
-python coding_model_ab.py --tasks coding_r4_tasks.json --work ab_work_r4     # preregistered coding A/B
-python probe_models.py --out probe_models.json                               # dump host model catalog
-python probe_preset_defaults.py                                              # per-preset default models
-python verify_select_model.py --preset standard --provider <p> --model <m>   # prove selectModel takes effect
-```
+Gold labels are true by construction, not human agreement. The gold generator's workspace path is outside this repository, so the gold files cannot be rebuilt here. Verdict rows do not name a provider or model. Live routing was not re-run. A coding ceiling is a null result, not evidence the two arms are the same. Details are in [FAILURE_MODES.md](FAILURE_MODES.md).
 
-## Repository structure
+## Withdrawn
 
-```
-ask.py                    Unified entry point: classify → route → execute → summarize;
-                          --list-routes / --check-routes introspection
-dispatcher.py             Core P1 dispatch loop (classify, single-domain routing, escalation)
-plan_executor.py          P2 composite planner: DAG proposal, deterministic validation,
-                          topological execution, checkpoint/resume, aggregation
-classify_run.py           Calibrated classify-judge runner (gold set → verdicts + stats)
-classify_gold_gen.py      Gold set generator (truth by construction; needs the original
-                          workspace's frozen task files, which are not in this repo)
-sched_sessions.py         Session ledger management: list / stats / retire (--confirm)
-coding_model_ab.py        Preregistered A/B of model mapping on coding tasks
-                          (deterministic assert-and-run scoring, exact McNemar)
-probe_models.py           Probe the host's model catalog (session.models)
-probe_preset_defaults.py  Probe each preset's default model
-verify_select_model.py    Three-step evidence that selectModel actually reroutes
-verify_tool_plugin.py     E2E check that the scheduler tool is visible to agent sessions
-demo_tool_dispatch.py     Demo: an agent session dispatching through the scheduler tool
-test_plan_executor.py     Pure-logic tests for plan_executor (no model calls)
-validate_coding_tests.py  Self-validate A/B task assertions with reference implementations
-validate_coding_r4_tests.py  Same, for the 16-task fleet-r4 set
-
-config.json               Routing threshold and prompt version stamp
-model_map.json            Frozen (preregistered) per-preset model mapping — currently
-                          all null: keep provider defaults, mapping is opt-in
-gold_classify_v1.json     Committed gold sets for the classify judge
-gold_classify_v2.json
-coding_ab_tasks.json      Coding A/B task sets with deterministic assertions
-coding_r4_tasks.json
-analysis_plan_fleet_r4.json  Frozen analysis plan for fleet-r4
-fleet_r4_report.md        A/B results report (null result, disclosed as such)
-sched_sessions.json       Git-tracked session ledger (no-auto-delete policy)
-
-calib_classify_v1/        Committed calibration runs: verdicts, escalation pairs, stats
-calib_classify_v2gold/
-calib_classify_china/
-calib_l1_baidu/
-ab_work/                  A/B artifacts: generated code + assertions per task/arm
-ab_work_r4/
-ab_work_regression/
-runs/                     Committed example run outputs (state.json + summary.md)
-smoke/                    Committed smoke-test runs (one per class + composite/clarify)
-smoke_p2/                 Smoke tests for planner/DAG execution paths
-smoke_p3/                 Smoke test for model mapping
-```
+The previous README compressed the classify runs into one rounded accuracy range and described both coding rounds as the longer ceiling. Those sentences are withdrawn. The checked block is the claim.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
-
-## 本机可重跑性
-
-`make eval` 跑两套离线测试：验收题库 `python3 eval/run_cases.py`（20 条，必须 20/20）与纯逻辑测试 `python3 test_plan_executor.py`（ALL PASS），全程无模型调用；原入口 `probe_models.py` 需要 `127.0.0.1:3080/api` 的活体 agent host，本机无凭据时服务端回 `unauthorized`，故保留为 `make ci-eval`。
-
-## 验收标准与复算
-
-本仓判为合格的条件是 `python3 eval/run_cases.py` 通过率必须为 100%（20/20），且 `make eval` 退出码必须为 0；任何一条失败即判为不合格。
-
-题库 `eval/cases.jsonl` 的 20 条按 8 个 axis 分布，期望值全部由本仓 API 现算或直接从本仓数据文件解析（不是抄文档）：
-
-| axis | 条数 | 判什么 | 主要依据 |
-| --- | --- | --- | --- |
-| plan-validation | 3 | `verify_plan` 的合法计划 / 保护层关键词强制标记 / 非法 preset 拒绝 | `plan_executor.py` |
-| plan-parse | 2 | `extract_plan_json` 从说明文字中取计划；非字符串入参的异常语义 | `plan_executor.py` |
-| dag-topo | 3 | Kahn 分层的链 / 环 / 菱形三种形状 | `plan_executor.py` |
-| execution | 3 | 上游答案注入、保护层不投递、上游 fail → 下游 skip | `plan_executor.py` |
-| aggregation | 3 | `summary.md` 明细行数、待确认小节、失败与跳过小节 | `plan_executor.py` |
-| routing | 2 | `ROUTABLE` 7 个 preset、关键词 46 条且无跨 preset 二义 | `dispatcher.py` |
-| ledger | 2 | `sched_sessions.json` 45 条、按 purpose 计数 21/21/3 | `sched_sessions.json` |
-| calibration | 2 | `calib_classify_v1` 的 exact_match/n 复算、gold v2 的 n/items/counts 自洽 | `calib_classify_v1/stats.json`、`gold_classify_v2.json` |
-
-三条命令（全部离线，无模型调用）：
-
-```bash
-python3 eval/run_cases.py            # 20/20，退出码 0；任一失败退出码 1，题库自身损坏退出码 2
-python3 eval/run_cases.py --selftest # 篡改第 1 条期望值 → 必须变红（19/20），退出码 0 证明这套题不是装饰
-make eval                            # run_cases + test_plan_executor，两者任一失败则退出码非 0
-```
-
-复算说明：`python3 eval/run_cases.py --save` 会把本次逐条结果写到 `eval/run-report.json`（含 `total/passed/failed/failed_by_axis/results`），任何人可用同一命令重跑并逐条比对 `detail`。calibration 两条不是读备份数字，而是拿 `stats.json` 里的 `exact_match / n` 重算出 `exact_accuracy`，不一致时直接报 `MISMATCH`；ledger 与 routing 两条现数条目，README 里的 45 条 / 46 关键词可被独立复算。
-
-失败归因：`run_cases.py` 不只报通过率，失败时按 axis 汇总并逐条点名，例如
-
-```
-17/20 cases passed
-失败归因（按 axis）：
-  execution: 2 条 —— ex-01, ex-03
-  ledger: 1 条 —— lg-01
-```
-
-含义是「执行链路（上游注入 / 下游 skip）」与「账本条目数」两处口径变了，而不是笼统的「题库挂了」；改实现后按这个分桶先定位模块，再看 `eval/run-report.json` 里对应的 `detail`。
+MIT. See [LICENSE](LICENSE).

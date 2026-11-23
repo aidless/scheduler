@@ -80,3 +80,5 @@ jobs:
               print("JSON", b)
           sys.exit(1 if bad else 0)
           PY
+      - name: Recompute README numbers
+        run: make check

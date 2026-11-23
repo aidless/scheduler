@@ -1,5 +1,5 @@
-# aidless/scheduler — no third-party runtime dependencies
+# aidless/scheduler — no third-party runtime dependencies.
 #
-# Verified by scanning all 63 Python files in this repo: every import resolves to
-# the standard library or to a module inside this repository.
+# check/recompute.py rejects a Python file whose imports are not the standard
+# library or a top-level module in this repository.
 # Keep this file: it makes the absence of dependencies explicit instead of implicit.
